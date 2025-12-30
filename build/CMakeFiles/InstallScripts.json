@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/home/ada/Project/PacketGhost/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
