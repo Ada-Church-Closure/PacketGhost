@@ -64,3 +64,36 @@ void session_print_stats() {
     unsigned int count = HASH_COUNT(g_sessions);
     printf("[Session] Current active flows: %u\n", count);
 }
+
+void session_update(session_t *s, struct tcphdr *tcp) {
+    if (!s || !tcp) return;
+
+    if (tcp->rst) {
+        s->state = TCP_STATE_CLOSED;
+        printf("[Session] RST recerived, flow closed/\n");
+        return;
+    }
+
+    switch (s->state) {
+        case TCP_STATE_SYN_SENT:
+            if (!tcp->syn && tcp->ack) {
+                s->state = TCP_STATE_ESTABLISHED;
+                printf("[Session] Handshake complete! State -> ESTABLISHED\n");
+            }
+            break;
+        case TCP_STATE_ESTABLISHED:
+            if (tcp->fin) {
+                s->state = TCP_STATE_FIN_WAIT;
+                printf("[Session] FIN sent! State -> FIN_WAIT(1,2)\n");
+            }
+            break;
+        case TCP_STATE_FIN_WAIT:
+            if (tcp->ack || tcp->rst) {
+                s->state = TCP_STATE_CLOSED;
+                printf("[Session] Connection closing...\n");
+            }
+            break;
+        default:
+            break;
+    }
+}

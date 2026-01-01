@@ -3,6 +3,7 @@
 
 // The session.h session.c mainly are used to record the state of the data
 // when it goes to the Server, it has to be resemmbled suucessfully.
+#include <netinet/tcp.h>
 #include <stdint.h>
 #include "../utils/uthash.h"
 
@@ -14,7 +15,7 @@ struct flow_key_v4 {
     uint16_t dst_port;
 };
 
-// 状态枚举
+// TODO: use more state of TCP
 typedef enum {
     TCP_STATE_NONE,
     TCP_STATE_SYN_SENT,
@@ -40,5 +41,6 @@ session_t* session_find(uint32_t saddr, uint32_t daddr, uint16_t sport, uint16_t
 session_t* session_create(uint32_t saddr, uint32_t daddr, uint16_t sport, uint16_t dport);
 void session_destroy(session_t *s);
 void session_print_stats();
+void session_update(session_t *s, struct tcphdr *tcp);
 
 #endif

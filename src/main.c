@@ -4,6 +4,7 @@
 #include <linux/netfilter.h>
 #include <libnetfilter_queue/libnetfilter_queue.h>
 #include <arpa/inet.h>
+#include <stdlib.h>
 
 #include "protocol/packet.h"
 #include "state/session.h"
@@ -29,21 +30,30 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
             uint16_t sport = ntohs(pkt.tcp->source);
             uint16_t dport = ntohs(pkt.tcp->dest);
 
-            // 1. 查找会话
             session_t *sess = session_find(saddr, daddr, sport, dport);
-            
-            // 2. 如果没找到，且是 SYN 包，创建新会话
+
             if (!sess && pkt.tcp->syn && !pkt.tcp->ack) {
                 sess = session_create(saddr, daddr, sport, dport);
             }
 
-            // 3. 打印状态
             if (sess) {
-                printf("[FLOW] State: %d | %u:%u -> %u:%u\n", 
-                       sess->state, sport, dport, saddr, daddr);
-            } else {
-                // 没找到会话也不是 SYN，可能是无状态的包或者 ACK 扫描
-                printf("[DROP?] Unknown flow packet.\n");
+                session_update(sess, pkt.tcp);
+                if (sess->state == TCP_STATE_CLOSED) {
+                    session_destroy(sess);
+                    sess = NULL;
+                    printf("[Session] Flow destroyed.\n");
+                }
+            }
+
+            if (sess) {
+                // 打印稍微美化一下，把数字变成可读的单词
+                const char* state_str = "UNKNOWN";
+                if (sess->state == TCP_STATE_SYN_SENT) state_str = "SYN_SENT";
+                else if (sess->state == TCP_STATE_ESTABLISHED) state_str = "ESTABLISHED";
+                else if (sess->state == TCP_STATE_FIN_WAIT) state_str = "FIN_WAIT";
+
+                printf("[FLOW] %s | %u -> %u | Payload: %u\n", 
+                       state_str, sport, dport, pkt.payload_len);
             }
         }
     }
