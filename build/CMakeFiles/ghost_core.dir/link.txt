@@ -1,2 +1,0 @@
-/usr/bin/ar qc libghost_core.a CMakeFiles/ghost_core.dir/src/core/engine.cpp.o CMakeFiles/ghost_core.dir/src/core/interceptor.cpp.o CMakeFiles/ghost_core.dir/src/protocol/packet_parser.cpp.o CMakeFiles/ghost_core.dir/src/protocol/tcp_state.cpp.o CMakeFiles/ghost_core.dir/src/utils/checksum.cpp.o
-/usr/bin/ranlib libghost_core.a

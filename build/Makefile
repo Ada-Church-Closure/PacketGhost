@@ -65,16 +65,6 @@ CMAKE_BINARY_DIR = /home/ada/Project/PacketGhost/build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target test
-test:
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running tests..."
-	/usr/bin/ctest $(ARGS)
-.PHONY : test
-
-# Special rule for the target test
-test/fast: test
-.PHONY : test/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake cache editor..."
@@ -127,19 +117,6 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named ghost_core
-
-# Build rule for target.
-ghost_core: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 ghost_core
-.PHONY : ghost_core
-
-# fast build rule for target.
-ghost_core/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/build
-.PHONY : ghost_core/fast
-
-#=============================================================================
 # Target rules for targets named packet_ghost
 
 # Build rule for target.
@@ -152,186 +129,77 @@ packet_ghost/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/build
 .PHONY : packet_ghost/fast
 
-#=============================================================================
-# Target rules for targets named unit_tests
-
-# Build rule for target.
-unit_tests: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 unit_tests
-.PHONY : unit_tests
-
-# fast build rule for target.
-unit_tests/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/unit_tests.dir/build.make CMakeFiles/unit_tests.dir/build
-.PHONY : unit_tests/fast
-
-src/core/engine.o: src/core/engine.cpp.o
-.PHONY : src/core/engine.o
-
-# target to build an object file
-src/core/engine.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/core/engine.cpp.o
-.PHONY : src/core/engine.cpp.o
-
-src/core/engine.i: src/core/engine.cpp.i
-.PHONY : src/core/engine.i
-
-# target to preprocess a source file
-src/core/engine.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/core/engine.cpp.i
-.PHONY : src/core/engine.cpp.i
-
-src/core/engine.s: src/core/engine.cpp.s
-.PHONY : src/core/engine.s
-
-# target to generate assembly for a file
-src/core/engine.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/core/engine.cpp.s
-.PHONY : src/core/engine.cpp.s
-
-src/core/interceptor.o: src/core/interceptor.cpp.o
-.PHONY : src/core/interceptor.o
-
-# target to build an object file
-src/core/interceptor.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/core/interceptor.cpp.o
-.PHONY : src/core/interceptor.cpp.o
-
-src/core/interceptor.i: src/core/interceptor.cpp.i
-.PHONY : src/core/interceptor.i
-
-# target to preprocess a source file
-src/core/interceptor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/core/interceptor.cpp.i
-.PHONY : src/core/interceptor.cpp.i
-
-src/core/interceptor.s: src/core/interceptor.cpp.s
-.PHONY : src/core/interceptor.s
-
-# target to generate assembly for a file
-src/core/interceptor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/core/interceptor.cpp.s
-.PHONY : src/core/interceptor.cpp.s
-
-src/main.o: src/main.cpp.o
+src/main.o: src/main.c.o
 .PHONY : src/main.o
 
 # target to build an object file
-src/main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/main.cpp.o
-.PHONY : src/main.cpp.o
+src/main.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/main.c.o
+.PHONY : src/main.c.o
 
-src/main.i: src/main.cpp.i
+src/main.i: src/main.c.i
 .PHONY : src/main.i
 
 # target to preprocess a source file
-src/main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/main.cpp.i
-.PHONY : src/main.cpp.i
+src/main.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/main.c.i
+.PHONY : src/main.c.i
 
-src/main.s: src/main.cpp.s
+src/main.s: src/main.c.s
 .PHONY : src/main.s
 
 # target to generate assembly for a file
-src/main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/main.cpp.s
-.PHONY : src/main.cpp.s
+src/main.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/main.c.s
+.PHONY : src/main.c.s
 
-src/protocol/packet_parser.o: src/protocol/packet_parser.cpp.o
-.PHONY : src/protocol/packet_parser.o
-
-# target to build an object file
-src/protocol/packet_parser.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/protocol/packet_parser.cpp.o
-.PHONY : src/protocol/packet_parser.cpp.o
-
-src/protocol/packet_parser.i: src/protocol/packet_parser.cpp.i
-.PHONY : src/protocol/packet_parser.i
-
-# target to preprocess a source file
-src/protocol/packet_parser.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/protocol/packet_parser.cpp.i
-.PHONY : src/protocol/packet_parser.cpp.i
-
-src/protocol/packet_parser.s: src/protocol/packet_parser.cpp.s
-.PHONY : src/protocol/packet_parser.s
-
-# target to generate assembly for a file
-src/protocol/packet_parser.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/protocol/packet_parser.cpp.s
-.PHONY : src/protocol/packet_parser.cpp.s
-
-src/protocol/tcp_state.o: src/protocol/tcp_state.cpp.o
-.PHONY : src/protocol/tcp_state.o
+src/protocol/packet.o: src/protocol/packet.c.o
+.PHONY : src/protocol/packet.o
 
 # target to build an object file
-src/protocol/tcp_state.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/protocol/tcp_state.cpp.o
-.PHONY : src/protocol/tcp_state.cpp.o
+src/protocol/packet.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o
+.PHONY : src/protocol/packet.c.o
 
-src/protocol/tcp_state.i: src/protocol/tcp_state.cpp.i
-.PHONY : src/protocol/tcp_state.i
+src/protocol/packet.i: src/protocol/packet.c.i
+.PHONY : src/protocol/packet.i
 
 # target to preprocess a source file
-src/protocol/tcp_state.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/protocol/tcp_state.cpp.i
-.PHONY : src/protocol/tcp_state.cpp.i
+src/protocol/packet.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/protocol/packet.c.i
+.PHONY : src/protocol/packet.c.i
 
-src/protocol/tcp_state.s: src/protocol/tcp_state.cpp.s
-.PHONY : src/protocol/tcp_state.s
+src/protocol/packet.s: src/protocol/packet.c.s
+.PHONY : src/protocol/packet.s
 
 # target to generate assembly for a file
-src/protocol/tcp_state.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/protocol/tcp_state.cpp.s
-.PHONY : src/protocol/tcp_state.cpp.s
+src/protocol/packet.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/protocol/packet.c.s
+.PHONY : src/protocol/packet.c.s
 
-src/utils/checksum.o: src/utils/checksum.cpp.o
-.PHONY : src/utils/checksum.o
+src/state/session.o: src/state/session.c.o
+.PHONY : src/state/session.o
 
 # target to build an object file
-src/utils/checksum.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/utils/checksum.cpp.o
-.PHONY : src/utils/checksum.cpp.o
+src/state/session.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/state/session.c.o
+.PHONY : src/state/session.c.o
 
-src/utils/checksum.i: src/utils/checksum.cpp.i
-.PHONY : src/utils/checksum.i
-
-# target to preprocess a source file
-src/utils/checksum.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/utils/checksum.cpp.i
-.PHONY : src/utils/checksum.cpp.i
-
-src/utils/checksum.s: src/utils/checksum.cpp.s
-.PHONY : src/utils/checksum.s
-
-# target to generate assembly for a file
-src/utils/checksum.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/ghost_core.dir/build.make CMakeFiles/ghost_core.dir/src/utils/checksum.cpp.s
-.PHONY : src/utils/checksum.cpp.s
-
-tests/test_checksum.o: tests/test_checksum.cpp.o
-.PHONY : tests/test_checksum.o
-
-# target to build an object file
-tests/test_checksum.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/unit_tests.dir/build.make CMakeFiles/unit_tests.dir/tests/test_checksum.cpp.o
-.PHONY : tests/test_checksum.cpp.o
-
-tests/test_checksum.i: tests/test_checksum.cpp.i
-.PHONY : tests/test_checksum.i
+src/state/session.i: src/state/session.c.i
+.PHONY : src/state/session.i
 
 # target to preprocess a source file
-tests/test_checksum.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/unit_tests.dir/build.make CMakeFiles/unit_tests.dir/tests/test_checksum.cpp.i
-.PHONY : tests/test_checksum.cpp.i
+src/state/session.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/state/session.c.i
+.PHONY : src/state/session.c.i
 
-tests/test_checksum.s: tests/test_checksum.cpp.s
-.PHONY : tests/test_checksum.s
+src/state/session.s: src/state/session.c.s
+.PHONY : src/state/session.s
 
 # target to generate assembly for a file
-tests/test_checksum.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/unit_tests.dir/build.make CMakeFiles/unit_tests.dir/tests/test_checksum.cpp.s
-.PHONY : tests/test_checksum.cpp.s
+src/state/session.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/state/session.c.s
+.PHONY : src/state/session.c.s
 
 # Help Target
 help:
@@ -341,31 +209,16 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... test"
-	@echo "... ghost_core"
 	@echo "... packet_ghost"
-	@echo "... unit_tests"
-	@echo "... src/core/engine.o"
-	@echo "... src/core/engine.i"
-	@echo "... src/core/engine.s"
-	@echo "... src/core/interceptor.o"
-	@echo "... src/core/interceptor.i"
-	@echo "... src/core/interceptor.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
-	@echo "... src/protocol/packet_parser.o"
-	@echo "... src/protocol/packet_parser.i"
-	@echo "... src/protocol/packet_parser.s"
-	@echo "... src/protocol/tcp_state.o"
-	@echo "... src/protocol/tcp_state.i"
-	@echo "... src/protocol/tcp_state.s"
-	@echo "... src/utils/checksum.o"
-	@echo "... src/utils/checksum.i"
-	@echo "... src/utils/checksum.s"
-	@echo "... tests/test_checksum.o"
-	@echo "... tests/test_checksum.i"
-	@echo "... tests/test_checksum.s"
+	@echo "... src/protocol/packet.o"
+	@echo "... src/protocol/packet.i"
+	@echo "... src/protocol/packet.s"
+	@echo "... src/state/session.o"
+	@echo "... src/state/session.i"
+	@echo "... src/state/session.s"
 .PHONY : help
 
 
