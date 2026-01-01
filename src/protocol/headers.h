@@ -21,10 +21,14 @@ public:
         size_t ip_len = ip->ihl * 4;
         if (_len < ip_len + sizeof(struct tcphdr)) return nullptr;
 
+        // 显然IP肯定在tcp头部的前面
         return reinterpret_cast<const struct tcphdr*>(_raw_data + ip_len);
     }
     
-    // 获取 Payload
+    /**
+     * 获取 Payload
+     * 这里payload是uint8*指针
+     */
     const uint8_t* payload() const {
         const auto* tcp = tcp_header();
         if (!tcp) return nullptr;
@@ -39,6 +43,9 @@ public:
         return _raw_data + total_header_len;
     }
 
+    /**
+     * 返回pakcet的payload的长度
+     */
     size_t payload_length() const {
         const auto* ip = ip_header();
         if (!ip) return 0;

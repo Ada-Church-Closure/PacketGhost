@@ -72,38 +72,10 @@ include CMakeFiles/packet_ghost.dir/flags.make
 CMakeFiles/packet_ghost.dir/codegen:
 .PHONY : CMakeFiles/packet_ghost.dir/codegen
 
-CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o: CMakeFiles/packet_ghost.dir/flags.make
-CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o: /home/ada/Project/PacketGhost/src/core/engine.cpp
-CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o: CMakeFiles/packet_ghost.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o -MF CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o.d -o CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o -c /home/ada/Project/PacketGhost/src/core/engine.cpp
-
-CMakeFiles/packet_ghost.dir/src/core/engine.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/packet_ghost.dir/src/core/engine.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ada/Project/PacketGhost/src/core/engine.cpp > CMakeFiles/packet_ghost.dir/src/core/engine.cpp.i
-
-CMakeFiles/packet_ghost.dir/src/core/engine.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/packet_ghost.dir/src/core/engine.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ada/Project/PacketGhost/src/core/engine.cpp -o CMakeFiles/packet_ghost.dir/src/core/engine.cpp.s
-
-CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o: CMakeFiles/packet_ghost.dir/flags.make
-CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o: /home/ada/Project/PacketGhost/src/core/interceptor.cpp
-CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o: CMakeFiles/packet_ghost.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o -MF CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o.d -o CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o -c /home/ada/Project/PacketGhost/src/core/interceptor.cpp
-
-CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ada/Project/PacketGhost/src/core/interceptor.cpp > CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.i
-
-CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ada/Project/PacketGhost/src/core/interceptor.cpp -o CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.s
-
 CMakeFiles/packet_ghost.dir/src/main.cpp.o: CMakeFiles/packet_ghost.dir/flags.make
 CMakeFiles/packet_ghost.dir/src/main.cpp.o: /home/ada/Project/PacketGhost/src/main.cpp
 CMakeFiles/packet_ghost.dir/src/main.cpp.o: CMakeFiles/packet_ghost.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/packet_ghost.dir/src/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/packet_ghost.dir/src/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/packet_ghost.dir/src/main.cpp.o -MF CMakeFiles/packet_ghost.dir/src/main.cpp.o.d -o CMakeFiles/packet_ghost.dir/src/main.cpp.o -c /home/ada/Project/PacketGhost/src/main.cpp
 
 CMakeFiles/packet_ghost.dir/src/main.cpp.i: cmake_force
@@ -114,72 +86,21 @@ CMakeFiles/packet_ghost.dir/src/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/packet_ghost.dir/src/main.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ada/Project/PacketGhost/src/main.cpp -o CMakeFiles/packet_ghost.dir/src/main.cpp.s
 
-CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o: CMakeFiles/packet_ghost.dir/flags.make
-CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o: /home/ada/Project/PacketGhost/src/protocol/packet_parser.cpp
-CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o: CMakeFiles/packet_ghost.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o -MF CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o.d -o CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o -c /home/ada/Project/PacketGhost/src/protocol/packet_parser.cpp
-
-CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ada/Project/PacketGhost/src/protocol/packet_parser.cpp > CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.i
-
-CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ada/Project/PacketGhost/src/protocol/packet_parser.cpp -o CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.s
-
-CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o: CMakeFiles/packet_ghost.dir/flags.make
-CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o: /home/ada/Project/PacketGhost/src/protocol/tcp_state.cpp
-CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o: CMakeFiles/packet_ghost.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o -MF CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o.d -o CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o -c /home/ada/Project/PacketGhost/src/protocol/tcp_state.cpp
-
-CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ada/Project/PacketGhost/src/protocol/tcp_state.cpp > CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.i
-
-CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ada/Project/PacketGhost/src/protocol/tcp_state.cpp -o CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.s
-
-CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o: CMakeFiles/packet_ghost.dir/flags.make
-CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o: /home/ada/Project/PacketGhost/src/utils/checksum.cpp
-CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o: CMakeFiles/packet_ghost.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o -MF CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o.d -o CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o -c /home/ada/Project/PacketGhost/src/utils/checksum.cpp
-
-CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ada/Project/PacketGhost/src/utils/checksum.cpp > CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.i
-
-CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ada/Project/PacketGhost/src/utils/checksum.cpp -o CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.s
-
 # Object files for target packet_ghost
 packet_ghost_OBJECTS = \
-"CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o" \
-"CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o" \
-"CMakeFiles/packet_ghost.dir/src/main.cpp.o" \
-"CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o" \
-"CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o" \
-"CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o"
+"CMakeFiles/packet_ghost.dir/src/main.cpp.o"
 
 # External object files for target packet_ghost
 packet_ghost_EXTERNAL_OBJECTS =
 
-packet_ghost: CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o
-packet_ghost: CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o
 packet_ghost: CMakeFiles/packet_ghost.dir/src/main.cpp.o
-packet_ghost: CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o
-packet_ghost: CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o
-packet_ghost: CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o
 packet_ghost: CMakeFiles/packet_ghost.dir/build.make
 packet_ghost: CMakeFiles/packet_ghost.dir/compiler_depend.ts
+packet_ghost: libghost_core.a
 packet_ghost: /usr/lib/libnetfilter_queue.so
 packet_ghost: /usr/lib/libnfnetlink.so
 packet_ghost: CMakeFiles/packet_ghost.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable packet_ghost"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable packet_ghost"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/packet_ghost.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

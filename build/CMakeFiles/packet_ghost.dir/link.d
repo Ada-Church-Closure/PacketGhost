@@ -2,14 +2,11 @@ packet_ghost: \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/Scrt1.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/crti.o \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o \
-  CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o \
-  CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o \
   CMakeFiles/packet_ghost.dir/src/main.cpp.o \
-  CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o \
-  CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o \
-  CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o \
+  libghost_core.a \
   /usr/lib/libnetfilter_queue.so \
   /usr/lib/libnfnetlink.so \
+  /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libpthread.a \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libstdc++.so \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libm.so \
   /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libm.so \
@@ -45,21 +42,15 @@ packet_ghost: \
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/crtbeginS.o:
 
-CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o:
-
-CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o:
-
 CMakeFiles/packet_ghost.dir/src/main.cpp.o:
 
-CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o:
-
-CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o:
-
-CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o:
+libghost_core.a:
 
 /usr/lib/libnetfilter_queue.so:
 
 /usr/lib/libnfnetlink.so:
+
+/usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libpthread.a:
 
 /usr/lib/gcc/x86_64-pc-linux-gnu/15.2.1/../../../../lib/libstdc++.so:
 

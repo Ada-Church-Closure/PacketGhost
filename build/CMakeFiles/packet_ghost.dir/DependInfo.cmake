@@ -8,12 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/ada/Project/PacketGhost/src/core/engine.cpp" "CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o" "gcc" "CMakeFiles/packet_ghost.dir/src/core/engine.cpp.o.d"
-  "/home/ada/Project/PacketGhost/src/core/interceptor.cpp" "CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o" "gcc" "CMakeFiles/packet_ghost.dir/src/core/interceptor.cpp.o.d"
   "/home/ada/Project/PacketGhost/src/main.cpp" "CMakeFiles/packet_ghost.dir/src/main.cpp.o" "gcc" "CMakeFiles/packet_ghost.dir/src/main.cpp.o.d"
-  "/home/ada/Project/PacketGhost/src/protocol/packet_parser.cpp" "CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o" "gcc" "CMakeFiles/packet_ghost.dir/src/protocol/packet_parser.cpp.o.d"
-  "/home/ada/Project/PacketGhost/src/protocol/tcp_state.cpp" "CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o" "gcc" "CMakeFiles/packet_ghost.dir/src/protocol/tcp_state.cpp.o.d"
-  "/home/ada/Project/PacketGhost/src/utils/checksum.cpp" "CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o" "gcc" "CMakeFiles/packet_ghost.dir/src/utils/checksum.cpp.o.d"
   "" "packet_ghost" "gcc" "CMakeFiles/packet_ghost.dir/link.d"
   )
 

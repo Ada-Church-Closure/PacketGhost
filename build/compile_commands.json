@@ -1,0 +1,44 @@
+[
+{
+  "directory": "/home/ada/Project/PacketGhost/build",
+  "command": "/usr/bin/c++  -I/home/ada/Project/PacketGhost/src -O2 -g -DNDEBUG -std=gnu++17 -Wall -Wextra -Wpedantic -o CMakeFiles/ghost_core.dir/src/core/engine.cpp.o -c /home/ada/Project/PacketGhost/src/core/engine.cpp",
+  "file": "/home/ada/Project/PacketGhost/src/core/engine.cpp",
+  "output": "CMakeFiles/ghost_core.dir/src/core/engine.cpp.o"
+},
+{
+  "directory": "/home/ada/Project/PacketGhost/build",
+  "command": "/usr/bin/c++  -I/home/ada/Project/PacketGhost/src -O2 -g -DNDEBUG -std=gnu++17 -Wall -Wextra -Wpedantic -o CMakeFiles/ghost_core.dir/src/core/interceptor.cpp.o -c /home/ada/Project/PacketGhost/src/core/interceptor.cpp",
+  "file": "/home/ada/Project/PacketGhost/src/core/interceptor.cpp",
+  "output": "CMakeFiles/ghost_core.dir/src/core/interceptor.cpp.o"
+},
+{
+  "directory": "/home/ada/Project/PacketGhost/build",
+  "command": "/usr/bin/c++  -I/home/ada/Project/PacketGhost/src -O2 -g -DNDEBUG -std=gnu++17 -Wall -Wextra -Wpedantic -o CMakeFiles/ghost_core.dir/src/protocol/packet_parser.cpp.o -c /home/ada/Project/PacketGhost/src/protocol/packet_parser.cpp",
+  "file": "/home/ada/Project/PacketGhost/src/protocol/packet_parser.cpp",
+  "output": "CMakeFiles/ghost_core.dir/src/protocol/packet_parser.cpp.o"
+},
+{
+  "directory": "/home/ada/Project/PacketGhost/build",
+  "command": "/usr/bin/c++  -I/home/ada/Project/PacketGhost/src -O2 -g -DNDEBUG -std=gnu++17 -Wall -Wextra -Wpedantic -o CMakeFiles/ghost_core.dir/src/protocol/tcp_state.cpp.o -c /home/ada/Project/PacketGhost/src/protocol/tcp_state.cpp",
+  "file": "/home/ada/Project/PacketGhost/src/protocol/tcp_state.cpp",
+  "output": "CMakeFiles/ghost_core.dir/src/protocol/tcp_state.cpp.o"
+},
+{
+  "directory": "/home/ada/Project/PacketGhost/build",
+  "command": "/usr/bin/c++  -I/home/ada/Project/PacketGhost/src -O2 -g -DNDEBUG -std=gnu++17 -Wall -Wextra -Wpedantic -o CMakeFiles/ghost_core.dir/src/utils/checksum.cpp.o -c /home/ada/Project/PacketGhost/src/utils/checksum.cpp",
+  "file": "/home/ada/Project/PacketGhost/src/utils/checksum.cpp",
+  "output": "CMakeFiles/ghost_core.dir/src/utils/checksum.cpp.o"
+},
+{
+  "directory": "/home/ada/Project/PacketGhost/build",
+  "command": "/usr/bin/c++  -I/home/ada/Project/PacketGhost/src -O2 -g -DNDEBUG -std=gnu++17 -Wall -Wextra -Wpedantic -o CMakeFiles/packet_ghost.dir/src/main.cpp.o -c /home/ada/Project/PacketGhost/src/main.cpp",
+  "file": "/home/ada/Project/PacketGhost/src/main.cpp",
+  "output": "CMakeFiles/packet_ghost.dir/src/main.cpp.o"
+},
+{
+  "directory": "/home/ada/Project/PacketGhost/build",
+  "command": "/usr/bin/c++ -DGTEST_LINKED_AS_SHARED_LIBRARY=1 -I/home/ada/Project/PacketGhost/src -O2 -g -DNDEBUG -std=gnu++17 -Wall -Wextra -Wpedantic -o CMakeFiles/unit_tests.dir/tests/test_checksum.cpp.o -c /home/ada/Project/PacketGhost/tests/test_checksum.cpp",
+  "file": "/home/ada/Project/PacketGhost/tests/test_checksum.cpp",
+  "output": "CMakeFiles/unit_tests.dir/tests/test_checksum.cpp.o"
+}
+]

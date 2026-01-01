@@ -1,3 +1,6 @@
+/home/ada/Project/PacketGhost/build/CMakeFiles/ghost_core.dir
 /home/ada/Project/PacketGhost/build/CMakeFiles/packet_ghost.dir
+/home/ada/Project/PacketGhost/build/CMakeFiles/unit_tests.dir
+/home/ada/Project/PacketGhost/build/CMakeFiles/test.dir
 /home/ada/Project/PacketGhost/build/CMakeFiles/edit_cache.dir
 /home/ada/Project/PacketGhost/build/CMakeFiles/rebuild_cache.dir

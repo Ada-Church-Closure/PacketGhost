@@ -1,0 +1,7 @@
+add_test([=[Checksum.IPv4Header]=]  /home/ada/Project/PacketGhost/build/unit_tests [==[--gtest_filter=Checksum.IPv4Header]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[Checksum.IPv4Header]=]  PROPERTIES DEF_SOURCE_LINE /home/ada/Project/PacketGhost/tests/test_checksum.cpp:23 WORKING_DIRECTORY /home/ada/Project/PacketGhost/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[Checksum.TCPNoPayload]=]  /home/ada/Project/PacketGhost/build/unit_tests [==[--gtest_filter=Checksum.TCPNoPayload]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[Checksum.TCPNoPayload]=]  PROPERTIES DEF_SOURCE_LINE /home/ada/Project/PacketGhost/tests/test_checksum.cpp:35 WORKING_DIRECTORY /home/ada/Project/PacketGhost/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test([=[Checksum.TCPWithOddPayload]=]  /home/ada/Project/PacketGhost/build/unit_tests [==[--gtest_filter=Checksum.TCPWithOddPayload]==] --gtest_also_run_disabled_tests)
+set_tests_properties([=[Checksum.TCPWithOddPayload]=]  PROPERTIES DEF_SOURCE_LINE /home/ada/Project/PacketGhost/tests/test_checksum.cpp:60 WORKING_DIRECTORY /home/ada/Project/PacketGhost/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set(  unit_tests_TESTS Checksum.IPv4Header Checksum.TCPNoPayload Checksum.TCPWithOddPayload)
