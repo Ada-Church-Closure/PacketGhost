@@ -26,4 +26,11 @@ typedef struct {
 // API: 传入原始数据和长度，填好 pkt 结构体
 void parse_packet(packet_t *pkt, uint8_t *data, uint32_t len);
 
+/**
+ * @brief Everytime we change the structure or content of TCP segment, we need to recalculate the checksum and put it into the TCP segment.
+ * 
+ * @param pkt The packet needs to be recalculate
+ */
+void recalculate_checksums(packet_t *pkt);
+
 #endif

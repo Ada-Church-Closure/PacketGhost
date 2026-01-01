@@ -54,12 +54,13 @@ CMakeFiles/packet_ghost.dir/src/main.c.o: \
  /usr/include/libnfnetlink/linux_nfnetlink_compat.h \
  /usr/include/byteswap.h \
  /usr/include/libnetfilter_queue/linux_nfnetlink_queue.h \
- /usr/include/arpa/inet.h /usr/include/stdlib.h \
- /usr/include/bits/waitflags.h /usr/include/bits/waitstatus.h \
- /usr/include/alloca.h /usr/include/bits/stdlib-float.h \
+ /usr/include/arpa/inet.h \
  /home/ada/Project/PacketGhost/src/protocol/packet.h \
  /usr/include/netinet/ip.h /usr/include/netinet/tcp.h \
  /home/ada/Project/PacketGhost/src/state/session.h \
  /home/ada/Project/PacketGhost/src/state/../utils/uthash.h \
  /usr/include/string.h /usr/include/bits/types/locale_t.h \
- /usr/include/bits/types/__locale_t.h /usr/include/strings.h
+ /usr/include/bits/types/__locale_t.h /usr/include/strings.h \
+ /usr/include/stdlib.h /usr/include/bits/waitflags.h \
+ /usr/include/bits/waitstatus.h /usr/include/alloca.h \
+ /usr/include/bits/stdlib-float.h

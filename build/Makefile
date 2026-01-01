@@ -129,6 +129,32 @@ packet_ghost/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/build
 .PHONY : packet_ghost/fast
 
+#=============================================================================
+# Target rules for targets named run_tests
+
+# Build rule for target.
+run_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 run_tests
+.PHONY : run_tests
+
+# fast build rule for target.
+run_tests/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/build
+.PHONY : run_tests/fast
+
+#=============================================================================
+# Target rules for targets named test
+
+# Build rule for target.
+test: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test
+.PHONY : test
+
+# fast build rule for target.
+test/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
+.PHONY : test/fast
+
 src/main.o: src/main.c.o
 .PHONY : src/main.o
 
@@ -159,6 +185,7 @@ src/protocol/packet.o: src/protocol/packet.c.o
 # target to build an object file
 src/protocol/packet.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/protocol/packet.c.o
 .PHONY : src/protocol/packet.c.o
 
 src/protocol/packet.i: src/protocol/packet.c.i
@@ -167,6 +194,7 @@ src/protocol/packet.i: src/protocol/packet.c.i
 # target to preprocess a source file
 src/protocol/packet.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/protocol/packet.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/protocol/packet.c.i
 .PHONY : src/protocol/packet.c.i
 
 src/protocol/packet.s: src/protocol/packet.c.s
@@ -175,6 +203,7 @@ src/protocol/packet.s: src/protocol/packet.c.s
 # target to generate assembly for a file
 src/protocol/packet.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/protocol/packet.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/protocol/packet.c.s
 .PHONY : src/protocol/packet.c.s
 
 src/state/session.o: src/state/session.c.o
@@ -183,6 +212,7 @@ src/state/session.o: src/state/session.c.o
 # target to build an object file
 src/state/session.c.o:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/state/session.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/state/session.c.o
 .PHONY : src/state/session.c.o
 
 src/state/session.i: src/state/session.c.i
@@ -191,6 +221,7 @@ src/state/session.i: src/state/session.c.i
 # target to preprocess a source file
 src/state/session.c.i:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/state/session.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/state/session.c.i
 .PHONY : src/state/session.c.i
 
 src/state/session.s: src/state/session.c.s
@@ -199,7 +230,80 @@ src/state/session.s: src/state/session.c.s
 # target to generate assembly for a file
 src/state/session.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/state/session.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/state/session.c.s
 .PHONY : src/state/session.c.s
+
+tests/main_test.o: tests/main_test.c.o
+.PHONY : tests/main_test.o
+
+# target to build an object file
+tests/main_test.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/main_test.c.o
+.PHONY : tests/main_test.c.o
+
+tests/main_test.i: tests/main_test.c.i
+.PHONY : tests/main_test.i
+
+# target to preprocess a source file
+tests/main_test.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/main_test.c.i
+.PHONY : tests/main_test.c.i
+
+tests/main_test.s: tests/main_test.c.s
+.PHONY : tests/main_test.s
+
+# target to generate assembly for a file
+tests/main_test.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/main_test.c.s
+.PHONY : tests/main_test.c.s
+
+tests/test_packet.o: tests/test_packet.c.o
+.PHONY : tests/test_packet.o
+
+# target to build an object file
+tests/test_packet.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/test_packet.c.o
+.PHONY : tests/test_packet.c.o
+
+tests/test_packet.i: tests/test_packet.c.i
+.PHONY : tests/test_packet.i
+
+# target to preprocess a source file
+tests/test_packet.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/test_packet.c.i
+.PHONY : tests/test_packet.c.i
+
+tests/test_packet.s: tests/test_packet.c.s
+.PHONY : tests/test_packet.s
+
+# target to generate assembly for a file
+tests/test_packet.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/test_packet.c.s
+.PHONY : tests/test_packet.c.s
+
+tests/test_utils.o: tests/test_utils.c.o
+.PHONY : tests/test_utils.o
+
+# target to build an object file
+tests/test_utils.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/test_utils.c.o
+.PHONY : tests/test_utils.c.o
+
+tests/test_utils.i: tests/test_utils.c.i
+.PHONY : tests/test_utils.i
+
+# target to preprocess a source file
+tests/test_utils.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/test_utils.c.i
+.PHONY : tests/test_utils.c.i
+
+tests/test_utils.s: tests/test_utils.c.s
+.PHONY : tests/test_utils.s
+
+# target to generate assembly for a file
+tests/test_utils.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/tests/test_utils.c.s
+.PHONY : tests/test_utils.c.s
 
 # Help Target
 help:
@@ -209,7 +313,9 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... test"
 	@echo "... packet_ghost"
+	@echo "... run_tests"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
@@ -219,6 +325,15 @@ help:
 	@echo "... src/state/session.o"
 	@echo "... src/state/session.i"
 	@echo "... src/state/session.s"
+	@echo "... tests/main_test.o"
+	@echo "... tests/main_test.i"
+	@echo "... tests/main_test.s"
+	@echo "... tests/test_packet.o"
+	@echo "... tests/test_packet.i"
+	@echo "... tests/test_packet.s"
+	@echo "... tests/test_utils.o"
+	@echo "... tests/test_utils.i"
+	@echo "... tests/test_utils.s"
 .PHONY : help
 
 

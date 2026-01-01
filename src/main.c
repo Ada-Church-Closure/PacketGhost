@@ -4,7 +4,6 @@
 #include <linux/netfilter.h>
 #include <libnetfilter_queue/libnetfilter_queue.h>
 #include <arpa/inet.h>
-#include <stdlib.h>
 
 #include "protocol/packet.h"
 #include "state/session.h"
