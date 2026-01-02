@@ -1,14 +1,14 @@
 #ifndef MUTATOR_H
 #define MUTATOR_H
 
-#include "../protocol/packet.h"
+#include "../common.h"
 
 /**
- * @brief Try to alter the content of HTTP User-Agent.
- * @param pkt The structure after revision.
- * @return int 1 = revised，0 = not revised.
+ * @brief try to modify HTTP agent
+ * @param ctx packet context
+ * @return int delta the length change of packet. 
  */
-int mutate_http_user_agent(packet_t *pkt);
+int mutator_try_modify_http(packet_ctx_t *ctx);
 
 /**
  * @brief Disable SACK in the header,because it's difficult to handle.

@@ -41,27 +41,18 @@ void parse_packet(packet_t *pkt, uint8_t *data, uint32_t len) {
 void recalculate_checksums(packet_t *pkt) {
     if (!pkt->valid) return;
 
-    // 1. 重算 IP 校验和 (只覆盖 IP 头)
-    pkt->ip->check = 0; // 先清零
+    pkt->ip->check = 0; 
     pkt->ip->check = checksum(pkt->ip, pkt->ip->ihl * 4, 0);
 
-    // 2. 重算 TCP 校验和 (覆盖 伪头部 + TCP头 + Payload)
-    pkt->tcp->check = 0; // 先清零
+    pkt->tcp->check = 0; 
 
-    // 2.1 构造伪头部校验和
-    // 技巧：我们可以手动加，不用构造结构体
     uint32_t sum = 0;
     sum += (pkt->ip->saddr >> 16) + (pkt->ip->saddr & 0xFFFF);
     sum += (pkt->ip->daddr >> 16) + (pkt->ip->daddr & 0xFFFF);
     sum += htons(IPPROTO_TCP);
     
-    // TCP 总长度 = TCP头 + Payload
     uint16_t tcp_len = (pkt->tcp->doff * 4) + pkt->payload_len;
     sum += htons(tcp_len);
 
-    // 2.2 计算 TCP 部分的校验和,TCP校验和我们是整个段来做计算的.
-    // 注意：这里要把 TCP 头和 Payload 当作一段连续内存来算
-    // 我们的 pkt->tcp 指向 TCP 头，它后面紧跟着就是 Payload
-    // 所以直接传 pkt->tcp 指针，长度传 tcp_len 即可
     pkt->tcp->check = checksum(pkt->tcp, tcp_len, sum);
 }

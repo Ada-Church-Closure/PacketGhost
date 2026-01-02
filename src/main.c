@@ -6,106 +6,124 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "common.h"
 #include "core/mutator.h"
 #include "protocol/packet.h"
 #include "state/session.h"
+
+static void process_outgoing(packet_ctx_t *ctx) {
+  // Ban SACK, this is simple.
+  if (ctx->pkt.tcp->syn) {
+    if (disable_tcp_sack(&(ctx->pkt))) {
+      ctx->verdict_data = ctx->raw_data;
+      ctx->verdict_len = ntohs(ctx->pkt.ip->tot_len);
+      printf("[NAT] SACK disabled for new flow.\n");
+    }
+  }
+
+  int current_delta = mutator_try_modify_http(ctx);
+
+  if (current_delta != 0) {
+    if (ctx->sess->ua_modified == 0) {
+      ctx->sess->seq_delta += current_delta;
+      ctx->sess->ua_modified = 1;
+      printf("[NAT] Outgoing mutated. Total Delta: %d\n", ctx->sess->seq_delta);
+    } else {
+      printf("[NAT] Retransmission detected. Delta kept at: %d\n",
+             ctx->sess->seq_delta);
+    }
+  }
+
+  uint32_t seq_correction = ctx->sess->seq_delta - current_delta;
+
+  if (seq_correction != 0 || current_delta != 0) {
+    if (seq_correction != 0) {
+      uint32_t old_seq = ntohl(ctx->pkt.tcp->seq);
+      ctx->pkt.tcp->seq = htonl(old_seq + seq_correction);
+    }
+    uint16_t ip_tot_len = ntohs(ctx->pkt.ip->tot_len);
+    uint16_t ip_hdr_len = ctx->pkt.ip->ihl * 4;
+    uint16_t tcp_hdr_len = ctx->pkt.tcp->doff * 4;
+    ctx->pkt.payload_len = ip_tot_len - ip_hdr_len - tcp_hdr_len;
+    recalculate_checksums(&ctx->pkt);
+
+    if (ctx->verdict_data == NULL) {
+      ctx->verdict_data = ctx->raw_data;
+      ctx->verdict_len = ntohs(ctx->pkt.ip->tot_len);
+    }
+  }
+}
+
+static void process_incoming(packet_ctx_t *ctx) {
+  if (ctx->pkt.tcp->ack && ctx->sess->seq_delta != 0) {
+    uint32_t server_ack = ntohl(ctx->pkt.tcp->ack_seq);
+    uint32_t fake_ack = server_ack - ctx->sess->seq_delta;
+
+    ctx->pkt.tcp->ack_seq = htonl(fake_ack);
+    recalculate_checksums(&ctx->pkt);
+
+    ctx->verdict_data = ctx->raw_data;
+    ctx->verdict_len = ctx->raw_len;
+  }
+}
 
 static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
               struct nfq_data *nfa, void *data) {
   (void)nfmsg;
   (void)data;
 
-  uint32_t id = 0;
+  packet_ctx_t ctx = {0};
+  ctx.qh = qh;
+
   struct nfqnl_msg_packet_hdr *ph = nfq_get_msg_packet_hdr(nfa);
   if (ph)
-    id = ntohl(ph->packet_id);
+    ctx.id = ntohl(ph->packet_id);
 
-  unsigned char *raw_data;
-  int len = nfq_get_payload(nfa, &raw_data);
+  ctx.raw_len = nfq_get_payload(nfa, &ctx.raw_data);
+  if (ctx.raw_len < 0)
+    return nfq_set_verdict(qh, ctx.id, NF_ACCEPT, 0, NULL);
 
-  uint32_t verdict = NF_ACCEPT;
-  unsigned char *verdict_data = NULL;
-  uint32_t verdict_len = 0;
+  // 2. 初始解析
+  parse_packet(&ctx.pkt, ctx.raw_data, ctx.raw_len);
+  if (!ctx.pkt.valid)
+    return nfq_set_verdict(qh, ctx.id, NF_ACCEPT, 0, NULL);
 
-  if (len >= 0) {
-    packet_t pkt;
-    parse_packet(&pkt, raw_data, len);
+  // 3. 查找会话
+  uint32_t saddr = ntohl(ctx.pkt.ip->saddr);
+  uint32_t daddr = ntohl(ctx.pkt.ip->daddr);
+  uint16_t sport = ntohs(ctx.pkt.tcp->source);
+  uint16_t dport = ntohs(ctx.pkt.tcp->dest);
 
-    if (pkt.valid) {
-      uint32_t saddr = ntohl(pkt.ip->saddr);
-      uint32_t daddr = ntohl(pkt.ip->daddr);
-      uint16_t sport = ntohs(pkt.tcp->source);
-      uint16_t dport = ntohs(pkt.tcp->dest);
-
-      session_t *sess = session_find(saddr, daddr, sport, dport);
-
-      if (!sess && pkt.tcp->syn && !pkt.tcp->ack) {
-        sess = session_create(saddr, daddr, sport, dport);
-      }
-
-      // TODO: If the packet is being retansmitted, we shouldn't change the delta.
-      if (sess) {
-        session_update(sess, pkt.tcp);
-        int is_out_going = (saddr == sess->client_ip);
-        // Client->Server
-        if (is_out_going) {
-          // Here,we disable SACK
-          if (pkt.tcp->syn) {
-            if (disable_tcp_sack(&pkt)) {
-              verdict_data = raw_data;
-              verdict_len = ntohs(pkt.ip->tot_len);
-              printf("[NAT] SACK disabled for new flow.\n");
-            }
-          }
-
-
-          // Revise the seqno
-          if (sess->seq_delta != 0) {
-            uint32_t old_seqno = ntohl(pkt.tcp->seq);
-            pkt.tcp->seq = htonl(old_seqno + sess->seq_delta);
-            recalculate_checksums(&pkt);
-            verdict_data = raw_data;
-            verdict_len = ntohs(pkt.ip->tot_len);
-          }
-
-          // Mutation
-          if (pkt.payload_len > 0) {
-            uint32_t old_len = pkt.payload_len;
-            if (mutate_http_user_agent(&pkt)) {
-              int current_delta = pkt.payload_len - old_len;
-              sess->seq_delta += current_delta; // accumulate the delta
-              verdict_data = raw_data;
-              verdict_len = ntohs(pkt.ip->tot_len);
-              printf("[NAT] Outgoing mutated. Total Delta: %d\n", sess->seq_delta);
-            }
-          }
-            
-          if (sess->state == TCP_STATE_CLOSED) {
-            session_destroy(sess);
-            sess = NULL;
-            printf("[Session] Flow destroyed.\n");
-          }
-        } else {
-          // Server -> Client
-          // We only change the ack packet.
-          if (pkt.tcp->ack && sess->seq_delta != 0) {
-            uint32_t server_ack = ntohl(pkt.tcp->ack_seq);
-            uint32_t fake_ack = server_ack - sess->seq_delta;
-            
-            pkt.tcp->ack_seq = htonl(fake_ack);
-            recalculate_checksums(&pkt);
-            
-            verdict_data = raw_data;
-            verdict_len = len;
-            printf("[NAT] Incoming ACK Fixed: %u -> %u\n", server_ack, fake_ack);
-          }
-        }
-      }
-    }
+  ctx.sess = session_find(saddr, daddr, sport, dport);
+  if (!ctx.sess && ctx.pkt.tcp->syn && !ctx.pkt.tcp->ack) {
+    ctx.sess = session_create(saddr, daddr, sport, dport);
   }
-  // we send the verdict,and if the verdict_data is not null
-  // kernel will use the verdict data to replace the old data.
-  return nfq_set_verdict(qh, id, verdict, verdict_len, verdict_data);
+
+  // 4. 逻辑分发
+  if (ctx.sess) {
+    session_update(ctx.sess, ctx.pkt.tcp);
+    ctx.is_outgoing = (saddr == ctx.sess->client_ip);
+
+    if (ctx.is_outgoing)
+      process_outgoing(&ctx);
+    else
+      process_incoming(&ctx);
+  }
+
+  if (ctx.sess && ctx.sess->state == TCP_STATE_CLOSED) {
+    session_destroy(ctx.sess);
+    printf("[Session] Flow destroyed.\n");
+  }
+
+  uint32_t final_verdict = NF_ACCEPT;
+  int ret = nfq_set_verdict(qh, ctx.id, final_verdict, ctx.verdict_len,
+                            ctx.verdict_data);
+
+  if (ctx.allocated_buffer) {
+    free(ctx.allocated_buffer);
+  }
+
+  return ret;
 }
 
 int main() {

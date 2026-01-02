@@ -47,11 +47,11 @@ session_t* session_create(uint32_t saddr, uint32_t daddr, uint16_t sport, uint16
     s->key.dst_port = dport;
     s->seq_delta = 0;
     s->client_ip = saddr;
+    s->ua_modified = 0;
+    
 
     s->state = TCP_STATE_SYN_SENT;
 
-
-    // HASH_ADD(hh, 头指针, Key字段名, Key长度, item指针)
     HASH_ADD(hh, g_sessions, key, sizeof(struct flow_key_v4), s);
 
     printf("[Session] New flow created: %u -> %u\n", sport, dport);
@@ -60,9 +60,7 @@ session_t* session_create(uint32_t saddr, uint32_t daddr, uint16_t sport, uint16
 
 void session_destroy(session_t *s) {
     if (!s) return;
-    // 从哈希表中移除
     HASH_DELETE(hh, g_sessions, s);
-    // 释放内存
     free(s);
 }
 
