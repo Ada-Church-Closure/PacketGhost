@@ -8,8 +8,10 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/ada/Project/PacketGhost/src/core/fragmenter.c" "CMakeFiles/packet_ghost.dir/src/core/fragmenter.c.o" "gcc" "CMakeFiles/packet_ghost.dir/src/core/fragmenter.c.o.d"
   "/home/ada/Project/PacketGhost/src/core/mutator.c" "CMakeFiles/packet_ghost.dir/src/core/mutator.c.o" "gcc" "CMakeFiles/packet_ghost.dir/src/core/mutator.c.o.d"
   "/home/ada/Project/PacketGhost/src/main.c" "CMakeFiles/packet_ghost.dir/src/main.c.o" "gcc" "CMakeFiles/packet_ghost.dir/src/main.c.o.d"
+  "/home/ada/Project/PacketGhost/src/network/injector.c" "CMakeFiles/packet_ghost.dir/src/network/injector.c.o" "gcc" "CMakeFiles/packet_ghost.dir/src/network/injector.c.o.d"
   "/home/ada/Project/PacketGhost/src/protocol/packet.c" "CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o" "gcc" "CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o.d"
   "/home/ada/Project/PacketGhost/src/state/session.c" "CMakeFiles/packet_ghost.dir/src/state/session.c.o" "gcc" "CMakeFiles/packet_ghost.dir/src/state/session.c.o.d"
   "" "packet_ghost" "gcc" "CMakeFiles/packet_ghost.dir/link.d"

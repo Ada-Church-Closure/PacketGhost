@@ -155,6 +155,33 @@ test/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
 .PHONY : test/fast
 
+src/core/fragmenter.o: src/core/fragmenter.c.o
+.PHONY : src/core/fragmenter.o
+
+# target to build an object file
+src/core/fragmenter.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/core/fragmenter.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/core/fragmenter.c.o
+.PHONY : src/core/fragmenter.c.o
+
+src/core/fragmenter.i: src/core/fragmenter.c.i
+.PHONY : src/core/fragmenter.i
+
+# target to preprocess a source file
+src/core/fragmenter.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/core/fragmenter.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/core/fragmenter.c.i
+.PHONY : src/core/fragmenter.c.i
+
+src/core/fragmenter.s: src/core/fragmenter.c.s
+.PHONY : src/core/fragmenter.s
+
+# target to generate assembly for a file
+src/core/fragmenter.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/core/fragmenter.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/core/fragmenter.c.s
+.PHONY : src/core/fragmenter.c.s
+
 src/core/mutator.o: src/core/mutator.c.o
 .PHONY : src/core/mutator.o
 
@@ -205,6 +232,33 @@ src/main.s: src/main.c.s
 src/main.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/main.c.s
 .PHONY : src/main.c.s
+
+src/network/injector.o: src/network/injector.c.o
+.PHONY : src/network/injector.o
+
+# target to build an object file
+src/network/injector.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/network/injector.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/network/injector.c.o
+.PHONY : src/network/injector.c.o
+
+src/network/injector.i: src/network/injector.c.i
+.PHONY : src/network/injector.i
+
+# target to preprocess a source file
+src/network/injector.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/network/injector.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/network/injector.c.i
+.PHONY : src/network/injector.c.i
+
+src/network/injector.s: src/network/injector.c.s
+.PHONY : src/network/injector.s
+
+# target to generate assembly for a file
+src/network/injector.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/network/injector.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/network/injector.c.s
+.PHONY : src/network/injector.c.s
 
 src/protocol/packet.o: src/protocol/packet.c.o
 .PHONY : src/protocol/packet.o
@@ -343,12 +397,18 @@ help:
 	@echo "... test"
 	@echo "... packet_ghost"
 	@echo "... run_tests"
+	@echo "... src/core/fragmenter.o"
+	@echo "... src/core/fragmenter.i"
+	@echo "... src/core/fragmenter.s"
 	@echo "... src/core/mutator.o"
 	@echo "... src/core/mutator.i"
 	@echo "... src/core/mutator.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/network/injector.o"
+	@echo "... src/network/injector.i"
+	@echo "... src/network/injector.s"
 	@echo "... src/protocol/packet.o"
 	@echo "... src/protocol/packet.i"
 	@echo "... src/protocol/packet.s"

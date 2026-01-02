@@ -7,9 +7,11 @@
 #include <stdio.h>
 
 #include "common.h"
+#include "core/fragmenter.h"
 #include "core/mutator.h"
 #include "protocol/packet.h"
 #include "state/session.h"
+#include "network/injector.h"
 
 static void process_outgoing(packet_ctx_t *ctx) {
   // Ban SACK, this is simple.
@@ -19,6 +21,15 @@ static void process_outgoing(packet_ctx_t *ctx) {
       ctx->verdict_len = ntohs(ctx->pkt.ip->tot_len);
       printf("[NAT] SACK disabled for new flow.\n");
     }
+  }
+
+  // TODO:make it more strong, at first, we use tcp segment fragment here.
+  if (try_fragment_http(ctx)) {
+    ctx->verdict = NF_DROP;
+    ctx->verdict_data = NULL;
+    ctx->verdict_len = 0;
+    printf("[NAT] Packet fragmented & Original dropped.\n");
+    return;
   }
 
   int current_delta = mutator_try_modify_http(ctx);
@@ -83,12 +94,10 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
   if (ctx.raw_len < 0)
     return nfq_set_verdict(qh, ctx.id, NF_ACCEPT, 0, NULL);
 
-  // 2. 初始解析
   parse_packet(&ctx.pkt, ctx.raw_data, ctx.raw_len);
   if (!ctx.pkt.valid)
     return nfq_set_verdict(qh, ctx.id, NF_ACCEPT, 0, NULL);
 
-  // 3. 查找会话
   uint32_t saddr = ntohl(ctx.pkt.ip->saddr);
   uint32_t daddr = ntohl(ctx.pkt.ip->daddr);
   uint16_t sport = ntohs(ctx.pkt.tcp->source);
@@ -99,7 +108,6 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
     ctx.sess = session_create(saddr, daddr, sport, dport);
   }
 
-  // 4. 逻辑分发
   if (ctx.sess) {
     session_update(ctx.sess, ctx.pkt.tcp);
     ctx.is_outgoing = (saddr == ctx.sess->client_ip);
@@ -127,6 +135,10 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
 }
 
 int main() {
+
+  if (injector_init() < 0) {
+    return -1;
+  }
   struct nfq_handle *h;
   struct nfq_q_handle *qh;
   int fd, rv;
@@ -158,5 +170,7 @@ int main() {
 
   nfq_destroy_queue(qh);
   nfq_close(h);
+
+  injector_close();
   return 0;
 }

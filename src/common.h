@@ -24,6 +24,7 @@ typedef struct {
     int is_outgoing; 
 
     // verdict result
+    uint32_t verdict;
     uint8_t *verdict_data; // point to the data which will be send to the kernal
     uint32_t verdict_len;
     
