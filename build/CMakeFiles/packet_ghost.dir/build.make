@@ -72,10 +72,24 @@ include CMakeFiles/packet_ghost.dir/flags.make
 CMakeFiles/packet_ghost.dir/codegen:
 .PHONY : CMakeFiles/packet_ghost.dir/codegen
 
+CMakeFiles/packet_ghost.dir/src/core/mutator.c.o: CMakeFiles/packet_ghost.dir/flags.make
+CMakeFiles/packet_ghost.dir/src/core/mutator.c.o: /home/ada/Project/PacketGhost/src/core/mutator.c
+CMakeFiles/packet_ghost.dir/src/core/mutator.c.o: CMakeFiles/packet_ghost.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/packet_ghost.dir/src/core/mutator.c.o"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/packet_ghost.dir/src/core/mutator.c.o -MF CMakeFiles/packet_ghost.dir/src/core/mutator.c.o.d -o CMakeFiles/packet_ghost.dir/src/core/mutator.c.o -c /home/ada/Project/PacketGhost/src/core/mutator.c
+
+CMakeFiles/packet_ghost.dir/src/core/mutator.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing C source to CMakeFiles/packet_ghost.dir/src/core/mutator.c.i"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E /home/ada/Project/PacketGhost/src/core/mutator.c > CMakeFiles/packet_ghost.dir/src/core/mutator.c.i
+
+CMakeFiles/packet_ghost.dir/src/core/mutator.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling C source to assembly CMakeFiles/packet_ghost.dir/src/core/mutator.c.s"
+	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S /home/ada/Project/PacketGhost/src/core/mutator.c -o CMakeFiles/packet_ghost.dir/src/core/mutator.c.s
+
 CMakeFiles/packet_ghost.dir/src/main.c.o: CMakeFiles/packet_ghost.dir/flags.make
 CMakeFiles/packet_ghost.dir/src/main.c.o: /home/ada/Project/PacketGhost/src/main.c
 CMakeFiles/packet_ghost.dir/src/main.c.o: CMakeFiles/packet_ghost.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/packet_ghost.dir/src/main.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/packet_ghost.dir/src/main.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/packet_ghost.dir/src/main.c.o -MF CMakeFiles/packet_ghost.dir/src/main.c.o.d -o CMakeFiles/packet_ghost.dir/src/main.c.o -c /home/ada/Project/PacketGhost/src/main.c
 
 CMakeFiles/packet_ghost.dir/src/main.c.i: cmake_force
@@ -89,7 +103,7 @@ CMakeFiles/packet_ghost.dir/src/main.c.s: cmake_force
 CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o: CMakeFiles/packet_ghost.dir/flags.make
 CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o: /home/ada/Project/PacketGhost/src/protocol/packet.c
 CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o: CMakeFiles/packet_ghost.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o -MF CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o.d -o CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o -c /home/ada/Project/PacketGhost/src/protocol/packet.c
 
 CMakeFiles/packet_ghost.dir/src/protocol/packet.c.i: cmake_force
@@ -103,7 +117,7 @@ CMakeFiles/packet_ghost.dir/src/protocol/packet.c.s: cmake_force
 CMakeFiles/packet_ghost.dir/src/state/session.c.o: CMakeFiles/packet_ghost.dir/flags.make
 CMakeFiles/packet_ghost.dir/src/state/session.c.o: /home/ada/Project/PacketGhost/src/state/session.c
 CMakeFiles/packet_ghost.dir/src/state/session.c.o: CMakeFiles/packet_ghost.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building C object CMakeFiles/packet_ghost.dir/src/state/session.c.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building C object CMakeFiles/packet_ghost.dir/src/state/session.c.o"
 	/usr/bin/cc $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/packet_ghost.dir/src/state/session.c.o -MF CMakeFiles/packet_ghost.dir/src/state/session.c.o.d -o CMakeFiles/packet_ghost.dir/src/state/session.c.o -c /home/ada/Project/PacketGhost/src/state/session.c
 
 CMakeFiles/packet_ghost.dir/src/state/session.c.i: cmake_force
@@ -116,6 +130,7 @@ CMakeFiles/packet_ghost.dir/src/state/session.c.s: cmake_force
 
 # Object files for target packet_ghost
 packet_ghost_OBJECTS = \
+"CMakeFiles/packet_ghost.dir/src/core/mutator.c.o" \
 "CMakeFiles/packet_ghost.dir/src/main.c.o" \
 "CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o" \
 "CMakeFiles/packet_ghost.dir/src/state/session.c.o"
@@ -123,6 +138,7 @@ packet_ghost_OBJECTS = \
 # External object files for target packet_ghost
 packet_ghost_EXTERNAL_OBJECTS =
 
+packet_ghost: CMakeFiles/packet_ghost.dir/src/core/mutator.c.o
 packet_ghost: CMakeFiles/packet_ghost.dir/src/main.c.o
 packet_ghost: CMakeFiles/packet_ghost.dir/src/protocol/packet.c.o
 packet_ghost: CMakeFiles/packet_ghost.dir/src/state/session.c.o
@@ -131,7 +147,7 @@ packet_ghost: CMakeFiles/packet_ghost.dir/compiler_depend.ts
 packet_ghost: /usr/lib/libnetfilter_queue.so
 packet_ghost: /usr/lib/libnfnetlink.so
 packet_ghost: CMakeFiles/packet_ghost.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking C executable packet_ghost"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/ada/Project/PacketGhost/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable packet_ghost"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/packet_ghost.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

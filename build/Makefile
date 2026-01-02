@@ -155,6 +155,33 @@ test/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/test.dir/build.make CMakeFiles/test.dir/build
 .PHONY : test/fast
 
+src/core/mutator.o: src/core/mutator.c.o
+.PHONY : src/core/mutator.o
+
+# target to build an object file
+src/core/mutator.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/core/mutator.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/core/mutator.c.o
+.PHONY : src/core/mutator.c.o
+
+src/core/mutator.i: src/core/mutator.c.i
+.PHONY : src/core/mutator.i
+
+# target to preprocess a source file
+src/core/mutator.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/core/mutator.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/core/mutator.c.i
+.PHONY : src/core/mutator.c.i
+
+src/core/mutator.s: src/core/mutator.c.s
+.PHONY : src/core/mutator.s
+
+# target to generate assembly for a file
+src/core/mutator.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/packet_ghost.dir/build.make CMakeFiles/packet_ghost.dir/src/core/mutator.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/run_tests.dir/build.make CMakeFiles/run_tests.dir/src/core/mutator.c.s
+.PHONY : src/core/mutator.c.s
+
 src/main.o: src/main.c.o
 .PHONY : src/main.o
 
@@ -316,6 +343,9 @@ help:
 	@echo "... test"
 	@echo "... packet_ghost"
 	@echo "... run_tests"
+	@echo "... src/core/mutator.o"
+	@echo "... src/core/mutator.i"
+	@echo "... src/core/mutator.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"

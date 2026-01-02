@@ -7,6 +7,7 @@
 
 #include "protocol/packet.h"
 #include "state/session.h"
+#include "core/mutator.h"
 
 static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
               struct nfq_data *nfa, void *data) {
@@ -18,6 +19,10 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
 
     unsigned char *raw_data;
     int len = nfq_get_payload(nfa, &raw_data);
+
+    uint32_t verdict = NF_ACCEPT;
+    unsigned char *verdict_data = NULL;
+    uint32_t verdict_len = 0;
 
     if (len >= 0) {
         packet_t pkt;
@@ -45,7 +50,6 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
             }
 
             if (sess) {
-                // 打印稍微美化一下，把数字变成可读的单词
                 const char* state_str = "UNKNOWN";
                 if (sess->state == TCP_STATE_SYN_SENT) state_str = "SYN_SENT";
                 else if (sess->state == TCP_STATE_ESTABLISHED) state_str = "ESTABLISHED";
@@ -54,10 +58,19 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
                 printf("[FLOW] %s | %u -> %u | Payload: %u\n", 
                        state_str, sport, dport, pkt.payload_len);
             }
+
+            if (pkt.payload_len > 0) {
+                if (mutate_http_user_agent(&pkt)) {
+                    verdict_data = raw_data; // raw_data has already been changed.
+                    verdict_len = len;
+                    printf("[nfqueue] Injecting modified packet (len=%d)", len);
+                }
+            }
         }
     }
-
-    return nfq_set_verdict(qh, id, NF_ACCEPT, 0, NULL);
+    // we send the verdict,and if the verdict_data is not null
+    // kernel will use the verdict data to replace the old data.
+    return nfq_set_verdict(qh, id, verdict, verdict_len, verdict_data);
 }
 
 int main() {
@@ -68,7 +81,6 @@ int main() {
 
     printf("Starting PacketGhost (Pure C)...\n");
 
-    // 初始化会话表
     session_init();
 
     h = nfq_open();

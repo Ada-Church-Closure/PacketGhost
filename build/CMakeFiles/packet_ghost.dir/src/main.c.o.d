@@ -63,4 +63,6 @@ CMakeFiles/packet_ghost.dir/src/main.c.o: \
  /usr/include/bits/types/__locale_t.h /usr/include/strings.h \
  /usr/include/stdlib.h /usr/include/bits/waitflags.h \
  /usr/include/bits/waitstatus.h /usr/include/alloca.h \
- /usr/include/bits/stdlib-float.h
+ /usr/include/bits/stdlib-float.h \
+ /home/ada/Project/PacketGhost/src/core/mutator.h \
+ /home/ada/Project/PacketGhost/src/core/../protocol/packet.h

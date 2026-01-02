@@ -15,7 +15,7 @@ struct flow_key_v4 {
     uint16_t dst_port;
 };
 
-// TODO: use more state of TCP
+// TODO: add more state of TCP
 typedef enum {
     TCP_STATE_NONE,
     TCP_STATE_SYN_SENT,

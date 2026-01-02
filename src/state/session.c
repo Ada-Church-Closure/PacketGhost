@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// 全局哈希表头指针 (必须初始化为 NULL)
 static session_t *g_sessions = NULL;
 
 void session_init() {
