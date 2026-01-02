@@ -15,7 +15,7 @@ struct flow_key_v4 {
     uint16_t dst_port;
 };
 
-// TODO: add more state of TCP
+// TODO: add more state of TCP, but for learning ,we only care about ESTABLISHED and CLOSED.
 typedef enum {
     TCP_STATE_NONE,
     TCP_STATE_SYN_SENT,
@@ -24,15 +24,22 @@ typedef enum {
     TCP_STATE_CLOSED
 } tcp_state_e;
 
-// 会话结构体
+/**
+ * @brief session struct
+ * 
+ */
 typedef struct {
-    struct flow_key_v4 key; // Key 必须在结构体里
+    struct flow_key_v4 key;
     
     tcp_state_e state;
     uint32_t seq;
     uint32_t ack;
+    // insert:delta > 0; delete:delta < 0
+    int seq_delta;
+    // judge the direction 
+    uint32_t client_ip;
 
-    UT_hash_handle hh; // uthash 必须包含这个句柄
+    UT_hash_handle hh; // uthash
 } session_t;
 
 // API

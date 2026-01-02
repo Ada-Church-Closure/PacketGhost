@@ -13,17 +13,25 @@ void session_init() {
 session_t* session_find(uint32_t saddr, uint32_t daddr, uint16_t sport, uint16_t dport) {
     session_t *s = NULL;
     
-    // 构造查找 Key
-    // 必须清零内存，防止 padding 里的垃圾数据影响 Hash 计算
-    struct flow_key_v4 k;
-    memset(&k, 0, sizeof(k)); 
-    k.src_ip = saddr;
-    k.dst_ip = daddr;
-    k.src_port = sport;
-    k.dst_port = dport;
+    // client aspect
+    struct flow_key_v4 k1;
+    memset(&k1, 0, sizeof(k1)); 
+    k1.src_ip = saddr;
+    k1.dst_ip = daddr;
+    k1.src_port = sport;
+    k1.dst_port = dport;
+    HASH_FIND(hh, g_sessions, &k1, sizeof(struct flow_key_v4), s);
+    if (s) return s; 
 
-    // HASH_FIND(hh, 头指针, Key指针, Key长度, 输出指针)
-    HASH_FIND(hh, g_sessions, &k, sizeof(struct flow_key_v4), s);
+    // server aspect
+    struct flow_key_v4 k2;
+    memset(&k2, 0, sizeof(k2));
+    k2.src_ip = daddr;
+    k2.dst_ip = saddr;
+    k2.src_port = dport;
+    k2.dst_port = sport;
+
+    HASH_FIND(hh, g_sessions, &k2, sizeof(struct flow_key_v4), s);
     return s;
 }
 
@@ -31,19 +39,18 @@ session_t* session_create(uint32_t saddr, uint32_t daddr, uint16_t sport, uint16
     session_t *s = (session_t*)malloc(sizeof(session_t));
     if (!s) return NULL;
 
-    // 初始化内存
     memset(s, 0, sizeof(session_t));
 
-    // 填充 Key
     s->key.src_ip = saddr;
     s->key.dst_ip = daddr;
     s->key.src_port = sport;
     s->key.dst_port = dport;
+    s->seq_delta = 0;
+    s->client_ip = saddr;
 
-    // 初始化状态
-    s->state = TCP_STATE_SYN_SENT; // 假设刚创建就是握手
+    s->state = TCP_STATE_SYN_SENT;
 
-    // 添加到哈希表
+
     // HASH_ADD(hh, 头指针, Key字段名, Key长度, item指针)
     HASH_ADD(hh, g_sessions, key, sizeof(struct flow_key_v4), s);
 
@@ -78,6 +85,11 @@ void session_update(session_t *s, struct tcphdr *tcp) {
             if (!tcp->syn && tcp->ack) {
                 s->state = TCP_STATE_ESTABLISHED;
                 printf("[Session] Handshake complete! State -> ESTABLISHED\n");
+            }
+            // This packet is from server.
+            // We are midman.
+            else if (tcp->syn && tcp->ack) {
+                printf("[Session] SYN-ACK seen! Server is alive.\n");
             }
             break;
         case TCP_STATE_ESTABLISHED:
