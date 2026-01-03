@@ -3,6 +3,8 @@
 
 #include "../common.h"
 
+#define OUT_OF_ORDER_INJECTION 1
+
 /**
  * @brief try to fragment the packet.
  *        we also introduce split Client Hello SNI splition here to handle https's problems.

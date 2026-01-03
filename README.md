@@ -62,7 +62,11 @@ The project is modularized to separate core logic, network interaction, and prot
 
 ## ⚡ Key Technical Features
 
-### 1. TLS ClientHello Fragmentation
+### 1.Variable length of headers
+
+For example, if you use curl -v, then we can change the "curl" into whatever you want such as "Mozilla" here,and we will introduce a variable "delta" to handle the changes of outputing packet's seqno and inputing packet's ackno to fit the protocol.
+
+### 2. TLS ClientHello Fragmentation
 
 To bypass HTTPS SNI blocking, PacketGhost identifies the TLS Record Layer. It fragments the packet at the first byte of the handshake header:
 
@@ -70,7 +74,7 @@ To bypass HTTPS SNI blocking, PacketGhost identifies the TLS Record Layer. It fr
 - **Packet B**: Contains the rest of the payload (`0x03 0x01 ... SNI ...`).
 - **Result**: The DPI device fails to recognize the TLS handshake signature in either packet and allows the traffic to pass.
 
-### 2. The "Ouroboros" Loop Avoidance
+### 3. The "Ouroboros" Loop Avoidance
 
 A common challenge in raw socket injection is the "infinite loop," where injected packets are re-intercepted by Netfilter. PacketGhost solves this by marking injected packets at the socket level:
 
@@ -82,7 +86,7 @@ setsockopt(sock, SOL_SOCKET, SO_MARK, &mark, sizeof(mark));
 
 Coupled with the `iptables` rule `! --mark 0x100`, this ensures a clean egress path.
 
-### 3. Zero-Copy Analysis (Partially Implemented)
+### 4. Zero-Copy Analysis (Partially Implemented)
 
 The project minimizes memory overhead by parsing protocol headers directly from the Netfilter buffer pointers where possible, only allocating memory during the fragmentation/injection phase.
 

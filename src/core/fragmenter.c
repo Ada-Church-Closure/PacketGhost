@@ -9,7 +9,8 @@
  *  TLS record layer:
  *      0x16: Content Type(Handshake) 0x03: Version Major(TLS) 0x01(0x03):
  *      Versoin Minor(TLS) xxxx: Length    0x01 Handshake Type(*Client Hello*)
- *      [ IP Header ] [ TCP Header ] [ TLS Record Header (5 bytes) ] [ TLS Content (Payload) ]
+ *      [ IP Header ] [ TCP Header ] [ TLS Record Header (5 bytes) ] [ TLS
+ * Content (Payload) ]
  * @param payload
  * @param len
  * @return int 1: changed successfully 0:changed failed.
@@ -115,6 +116,16 @@ int try_fragment_traffic(packet_ctx_t *ctx) {
     uint32_t original_seq = ntohl(ctx->pkt.tcp->seq);
     printf("[Fragmenter] Splitting %d bytes into %d + %d\n",
            ctx->pkt.payload_len, split_pos, ctx->pkt.payload_len - split_pos);
+
+    if (OUT_OF_ORDER_INJECTION) {
+      // send the second slice first
+      send_slice(ctx, original_seq + split_pos, payload_start + split_pos,
+                 ctx->pkt.payload_len - split_pos);
+      // send the first slice second
+      send_slice(ctx, original_seq, payload_start, split_pos);
+      printf("[Fragmenter] change order: %u before %u\n", original_seq + split_pos, original_seq);
+    }
+
     // send the first slice
     send_slice(ctx, original_seq, payload_start, split_pos);
 
