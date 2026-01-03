@@ -7,11 +7,12 @@
 #include <stdio.h>
 
 #include "common.h"
+#include "core/apply_strategies.h"
 #include "core/fragmenter.h"
 #include "core/mutator.h"
+#include "network/injector.h"
 #include "protocol/packet.h"
 #include "state/session.h"
-#include "network/injector.h"
 
 static void process_outgoing(packet_ctx_t *ctx) {
   // Ban SACK, this is simple.
@@ -24,11 +25,16 @@ static void process_outgoing(packet_ctx_t *ctx) {
   }
 
   // TODO:make it more strong, at first, we use tcp segment fragment here.
-  if (try_fragment_traffic(ctx)) {
-    ctx->verdict = NF_DROP;
-    ctx->verdict_data = NULL;
-    ctx->verdict_len = 0;
-    printf("[NAT] Packet fragmented & Original dropped.\n");
+  // if (try_fragment_traffic(ctx)) {
+  //   ctx->verdict = NF_DROP;
+  //   ctx->verdict_data = NULL;
+  //   ctx->verdict_len = 0;
+  //   printf("[NAT] Packet fragmented & Original dropped.\n");
+  //   return;
+  // }
+
+  // Here, we make a fake RST, default action is NF_ACCEPT.
+  if (apply_fake_RST_strategy(ctx) == 0) {
     return;
   }
 

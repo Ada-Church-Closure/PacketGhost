@@ -1,8 +1,10 @@
 #ifndef CSUM_H
 #define CSUM_H
 
+#include <assert.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <netinet/ip.h>
 
 // TCP Pseudo Header
 // It's a conception here.
@@ -40,6 +42,12 @@ static inline uint16_t checksum(void *buffer, size_t len, uint32_t start_sum) {
   }
 
   return (uint16_t)~sum;
+}
+
+static inline void recalculate_ip_checksums(struct iphdr *iph) {
+  iph->check = 0;
+  uint16_t len = iph->ihl * 4;
+  iph->check = checksum(iph, len, 0);
 }
 
 #endif
