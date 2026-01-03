@@ -24,7 +24,7 @@ static void process_outgoing(packet_ctx_t *ctx) {
   }
 
   // TODO:make it more strong, at first, we use tcp segment fragment here.
-  if (try_fragment_http(ctx)) {
+  if (try_fragment_traffic(ctx)) {
     ctx->verdict = NF_DROP;
     ctx->verdict_data = NULL;
     ctx->verdict_len = 0;

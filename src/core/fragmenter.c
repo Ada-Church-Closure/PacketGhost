@@ -1,59 +1,127 @@
 #include "fragmenter.h"
 #include "../network/injector.h"
-#include <string.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/**
+ * @brief recognize if it is a Client hello pkt.
+ *  TLS record layer:
+ *      0x16: Content Type(Handshake) 0x03: Version Major(TLS) 0x01(0x03):
+ *      Versoin Minor(TLS) xxxx: Length    0x01 Handshake Type(*Client Hello*)
+ *      [ IP Header ] [ TCP Header ] [ TLS Record Header (5 bytes) ] [ TLS Content (Payload) ]
+ * @param payload
+ * @param len
+ * @return int 1: changed successfully 0:changed failed.
+ */
+static int is_tls_hello(const uint8_t *payload, int len) {
+  if (len < 9)
+    return 0;
+  // Content Type = 0x16:Handshake
+  if (payload[0] != 0x16)
+    return 0;
+  // Version Major = 0x03 (SSL 3.0 / TLS 1.x)
+  if (payload[1] != 0x03)
+    return 0;
+  // Handshake Type = 0x01 Client Hello
+  if (payload[5] != 0x01)
+    return 0;
+
+  return 1;
+}
+
+/**
+ * @brief judge whether a method is a http method
+ *
+ * @param payload
+ * @param len
+ * @return int 1: is a http request 0:not a http request.
+ */
+static int is_http_request(const uint8_t *payload, int len) {
+  if (len < 4)
+    return 0;
+  if (memcmp(payload, "GET ", 4) == 0)
+    return 1;
+  if (memcmp(payload, "POST", 4) == 0)
+    return 1;
+  if (memcmp(payload, "HEAD", 4) == 0)
+    return 1;
+  if (memcmp(payload, "PUT ", 4) == 0)
+    return 1;
+  if (memcmp(payload, "DELE", 4) == 0)
+    return 1;
+  return 0;
+}
 
 /**
  * @brief Construct and send a slice
- * 
+ *
  * @param ctx packet context
  * @param seq  the seqno of the packet
- * @param payload  
- * @param payload_len 
+ * @param payload
+ * @param payload_len
  */
-static void send_slice(packet_ctx_t *ctx, uint32_t seq, uint8_t *payload, int payload_len) {
-    uint32_t ip_hdr_len = ctx->pkt.ip->ihl * 4;
-    uint32_t tcp_hdr_len = ctx->pkt.tcp->doff * 4;
-    uint32_t headers_len = ip_hdr_len + tcp_hdr_len;
-    
-    uint32_t total_len = headers_len + payload_len;
+static void send_slice(packet_ctx_t *ctx, uint32_t seq, uint8_t *payload,
+                       int payload_len) {
+  uint32_t ip_hdr_len = ctx->pkt.ip->ihl * 4;
+  uint32_t tcp_hdr_len = ctx->pkt.tcp->doff * 4;
+  uint32_t headers_len = ip_hdr_len + tcp_hdr_len;
 
-    uint8_t *slice = (uint8_t *)malloc(total_len);
-    if (!slice) return;
-    memcpy(slice, ctx->raw_data, headers_len);
-    if (payload_len > 0) {
-        memcpy(slice + headers_len, payload, payload_len);
-    }
-    packet_t slice_pkt;
-    parse_packet(&slice_pkt, slice, total_len);
-    slice_pkt.ip->tot_len = htons(total_len);
-    slice_pkt.ip->id = htons(ntohs(ctx->pkt.ip->id) + 1);
-    slice_pkt.tcp->seq = htonl(seq);
-    slice_pkt.payload_len = payload_len; 
-    recalculate_checksums(&slice_pkt);
-    injector_send(slice, total_len);
-    free(slice);
+  uint32_t total_len = headers_len + payload_len;
+
+  uint8_t *slice = (uint8_t *)malloc(total_len);
+  if (!slice)
+    return;
+  memcpy(slice, ctx->raw_data, headers_len);
+  if (payload_len > 0) {
+    memcpy(slice + headers_len, payload, payload_len);
+  }
+  packet_t slice_pkt;
+  parse_packet(&slice_pkt, slice, total_len);
+  slice_pkt.ip->tot_len = htons(total_len);
+  slice_pkt.ip->id = htons(ntohs(ctx->pkt.ip->id) + 1);
+  slice_pkt.tcp->seq = htonl(seq);
+  slice_pkt.payload_len = payload_len;
+  recalculate_checksums(&slice_pkt);
+  injector_send(slice, total_len);
+  free(slice);
 }
 
-int try_fragment_http(packet_ctx_t *ctx) {
-    if (!ctx->pkt.valid || ctx->pkt.payload_len <= 2) return 0;
-    // TODO: handle more specificly about the http method
-    if (!ctx->pkt.tcp->psh) return 0;
+int try_fragment_traffic(packet_ctx_t *ctx) {
+  if (!ctx->pkt.valid || ctx->pkt.payload_len <= 2)
+    return 0;
+  // TODO: handle more specificly about the http method
+  //   if (!ctx->pkt.tcp->psh)
+  //     return 0;
+
+  int should_fragment = 0;
+  int split_pos = 0;
+
+  if (is_http_request(ctx->pkt.payload, ctx->pkt.payload_len)) {
     // [Header] [P1 P2] [P3 P4 ... Pn]
     // Chunk 1: [Header] [P1 P2]
     // Chunk 2: [Header] [P3 ... Pn]
-    int split_pos = 2;
+    should_fragment = 1;
+    split_pos = 2;
+    printf("[Fragmenter] HTTP detected.\n");
+  } else if (is_tls_hello(ctx->pkt.payload, ctx->pkt.payload_len)) {
+    should_fragment = 1;
+    split_pos = 1;
+    printf("[Fragmenter] TLS Client Hello detected.\n");
+  }
+
+  if (should_fragment) {
     uint8_t *payload_start = ctx->pkt.payload;
     uint32_t original_seq = ntohl(ctx->pkt.tcp->seq);
-    printf("[Fragmenter] Splitting %d bytes into %d + %d\n", 
+    printf("[Fragmenter] Splitting %d bytes into %d + %d\n",
            ctx->pkt.payload_len, split_pos, ctx->pkt.payload_len - split_pos);
     // send the first slice
     send_slice(ctx, original_seq, payload_start, split_pos);
 
     // send the second slice
-    send_slice(ctx, original_seq + split_pos, 
-               payload_start + split_pos, 
+    send_slice(ctx, original_seq + split_pos, payload_start + split_pos,
                ctx->pkt.payload_len - split_pos);
     return 1;
+  }
+  return 0;
 }
