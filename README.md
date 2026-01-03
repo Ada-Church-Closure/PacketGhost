@@ -4,6 +4,8 @@
 
 The primary goal of this project is to research **Deep Packet Inspection (DPI) evasion strategies** by exploiting the implementation asymmetries between middleboxes (firewalls, IDS) and end-host TCP stacks. Currently, it implements advanced **TCP Fragmentation** and **Payload Splitting** strategies capable of bypassing SNI-based blocking (HTTPS) and Keyword filtering (HTTP).
 
+**Geneva Strategy Integration**: We add some of strategies (e.g., TCP window manipulation, out-of-order injection) as proposed in the [Geneva (CCS '19)](https://geneva.cs.umd.edu/) paper.
+
 ------
 
 ## 📖 Motivation
@@ -38,43 +40,63 @@ The project is modularized to separate core logic, network interaction, and prot
 
 ```sh
 .
-├── common.h            # Global definitions and configurations
-├── core/               # Core Logic for Traffic Manipulation
-│   ├── fragmenter.c    # Implementation of TCP fragmentation strategies (HTTP/TLS)
-│   ├── mutator.c       # Payload modification and replacement logic
-│   └── ...
-├── network/            # Low-level Network I/O
-│   ├── injector.c      # Raw Socket wrapper with SO_MARK support
-│   └── ...
-├── protocol/           # Protocol Parsing & Construction
-│   ├── packet.c        # Helpers for parsing IP/TCP headers from raw buffers
-│   └── ...
-├── state/              # Stateful Tracking (Experimental)
-│   ├── session.c       # TCP flow tracking and state machine management
-│   └── ...
-├── utils/              # Utilities
-│   ├── csum.h          # IP/TCP Checksum recalculation algorithms
-│   └── uthash.h        # Hash table implementation for session management
-└── main.c              # Entry point and Netfilter callback loop
+├── common.h                  # Global configuration macros and shared definitions
+├── main.c                    # Application entry point; initializes Netfilter hooks and event loops
+├── core/                     # Central logic for traffic analysis and manipulation
+│   ├── apply_strategies.c    # Strategy Dispatcher: matches traffic features to specific evasion logic
+│   ├── strategies.c          # Implementation of Geneva primitives (e.g., Fake RST, TTL Decoy)
+│   ├── fragmenter.c          # TCP Segmentation engine (HTTP/TLS splitting & Out-of-Order injection)
+│   └── mutator.c             # Payload modification logic (Legacy/Direct modification)
+├── network/                  # Low-level network I/O abstraction
+│   └── injector.c            # Raw Socket wrapper; handles SO_MARK to prevent routing loops
+├── protocol/                 # Protocol parsing and construction
+│   └── packet.c              # Lightweight parser for IP/TCP headers (Zero-copy approach)
+├── state/                    # Stateful TCP tracking (Optional/Experimental)
+│   └── session.c             # Manages TCP flow contexts and session tables
+└── utils/                    # Helper utilities
+    ├── csum.h                # Algorithms for IP/TCP checksum recalculation (Critical for tampering)
+    ├── protocol_types.h      # Struct definitions for protocol headers
+    └── uthash.h              # C macro for hash table implementation
 ```
 
 ------
 
 ## ⚡ Key Technical Features
 
-### 1.Variable length of headers
+### 1. Stateful Payload Modification (NAT)
 
-For example, if you use curl -v, then we can change the "curl" into whatever you want such as "Mozilla" here,and we will introduce a variable "delta" to handle the changes of outputing packet's seqno and inputing packet's ackno to fit the protocol.
+To support **Length-Changing Modifications** (e.g., replacing the short User-Agent `"curl"` with the longer `"Mozilla/5.0"`), PacketGhost implements a custom TCP Network Address Translation (NAT) mechanism.
+
+- **Mechanism**: It tracks the difference in length (`delta`) introduced by the modification.
+- **Result**: The engine dynamically corrects the **Sequence Numbers (SEQ)** of outgoing packets and the **Acknowledgment Numbers (ACK)** of incoming packets in real-time, preventing TCP connection desynchronization.
 
 ### 2. TLS ClientHello Fragmentation
 
-To bypass HTTPS SNI blocking, PacketGhost identifies the TLS Record Layer. It fragments the packet at the first byte of the handshake header:
+To bypass HTTPS SNI blocking, PacketGhost identifies the TLS Record Layer and fragments the packet at the very first byte of the handshake header:
 
 - **Packet A**: Contains only the first byte (`0x16`).
 - **Packet B**: Contains the rest of the payload (`0x03 0x01 ... SNI ...`).
-- **Result**: The DPI device fails to recognize the TLS handshake signature in either packet and allows the traffic to pass.
+- **Result**: The DPI device fails to recognize the TLS handshake signature in either packet and allows the traffic to pass, while the destination server reassembles it seamlessly.
 
-### 3. The "Ouroboros" Loop Avoidance
+### 3. Out-of-Order Packet Injection
+
+PacketGhost implements **TCP Reordering** to exploit the lack of reassembly buffers in stateless DPI middleboxes.
+
+- **Mechanism**: When splitting a packet, the engine injects the *second* fragment (Slice 2) into the network **before** the first fragment (Slice 1).
+- **Result**:
+  - **DPI**: Receives the second slice first (which lacks protocol headers), fails to identify the protocol, and allows it to pass.
+  - **Server**: Buffers the out-of-order slice and waits for the first slice to arrive, successfully reconstructing the stream.
+
+### 4. TCP Resync (Fake RST Injection)
+
+This strategy utilizes the **"Geneva" Tamper primitive** to desynchronize the state of the middlebox from the server.
+
+- **Mechanism**: The engine injects a fabricated TCP Reset (RST) packet with an **intentionally incorrect TCP Checksum** but a valid IP Checksum.
+- **Result**:
+  - **DPI**: Often ignores the checksum for performance reasons, processes the RST, and stops inspecting the connection (believing it is closed).
+  - **Server**: Validates the checksum, detects the error, and discards the fake RST packet, keeping the legitimate connection alive.
+
+### 5. The "Ouroboros" Loop Avoidance
 
 A common challenge in raw socket injection is the "infinite loop," where injected packets are re-intercepted by Netfilter. PacketGhost solves this by marking injected packets at the socket level:
 
@@ -84,11 +106,11 @@ int mark = 0x100;
 setsockopt(sock, SOL_SOCKET, SO_MARK, &mark, sizeof(mark));
 ```
 
-Coupled with the `iptables` rule `! --mark 0x100`, this ensures a clean egress path.
+Coupled with the `iptables` rule `! --mark 0x100`, this ensures a clean egress path for modified traffic.
 
-### 4. Zero-Copy Analysis (Partially Implemented)
+### 6. Zero-Copy Analysis
 
-The project minimizes memory overhead by parsing protocol headers directly from the Netfilter buffer pointers where possible, only allocating memory during the fragmentation/injection phase.
+The project minimizes memory overhead by parsing protocol headers directly from the Netfilter buffer pointers where possible. It adheres to a **Zero-Copy** philosophy for analysis, allocating new memory only during the fragmentation or injection phase.
 
 ------
 
@@ -143,7 +165,6 @@ PacketGhost requires `root` privileges to manipulate network interfaces.
 ## 🔮 Future Work
 
 - **eBPF / XDP Integration**: Moving the packet classification logic into the kernel using eBPF to reduce context switching overhead and achieve 10Gbps+ performance.
-- **Geneva Strategy Integration**: Implementing genetic algorithms to automatically discover new evasion strategies (e.g., TCP window manipulation, out-of-order injection) as proposed in the [Geneva (CCS '19)](https://geneva.cs.umd.edu/) paper.
 - **Configuration Parsing**: Supporting dynamic rule loading via JSON/YAML.
 
 ------
