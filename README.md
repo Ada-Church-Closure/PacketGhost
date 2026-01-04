@@ -4,7 +4,7 @@
 
 The primary goal of this project is to research **Deep Packet Inspection (DPI) evasion strategies** by exploiting the implementation asymmetries between middleboxes (firewalls, IDS) and end-host TCP stacks. Currently, it implements advanced **TCP Fragmentation** and **Payload Splitting** strategies capable of bypassing SNI-based blocking (HTTPS) and Keyword filtering (HTTP).
 
-**Geneva Strategy Integration**: This project implements a small, practical subset of strategies inspired by the [Geneva (CCS '19)](https://geneva.cs.umd.edu/) work, including out‑of‑order injection, bad‑checksum RST, and a configurable TTL decoy. The goal is faithful, minimal implementations suitable for experimentation rather than a full Geneva re‑implementation.
+**Geneva Strategy Integration:** While [Geneva (CCS '19)](https://geneva.cs.umd.edu/) utilizes a genetic algorithm to *discover* evasion strategies, PacketGhost focuses on the **deterministic, high-performance execution** of these strategies. It ports Geneva's core primitives (Tamper, Duplicate, Fragment, Drop) from Python to **pure C**, enabling deployment on resource-constrained devices (e.g., OpenWrt routers) with minimal overhead.
 
 ------
 
@@ -19,6 +19,34 @@ PacketGhost validates the hypothesis that **semantic-preserving mutations**—su
 ## 🏗️ Architecture
 
 PacketGhost utilizes a **Hybrid User-Kernel architecture** to achieve fine-grained control over packet transmission.
+
+```pleintext
++---------------------------------------------------------------+
+|                  USER SPACE (PacketGhost)                     |
+|                                                               |
+|   +-------------+      +------------------+      +---------+  |
+|   | NFQ Listener| ---> | Strategy Engine  | ---> | Injector|  |
+|   +------+------+      | (Split/Tamper)   |      +----+----+  |
+|          ^             +------------------+           |       |
+|          |                  Verdict: DROP             |       |
+|          |                 (Original Pkt)             |       |
++----------|------------------------|-------------------|-------+
+|          | libnetfilter_queue     |                   | raw   |
+|          |                        v                   | sock  |
+|   +------+------+          +------+------+       +----+----+  |
+|   | iptables    | <------- | Output Chain| <---- | SO_MARK |  |
+|   | (NFQUEUE)   |          +------+------+       | (0x100) |  |
+|   +-------------+                 ^              +---------+  |
+|          ^                        |                   |       |
+|          | (Normal Traffic)       | (Loop Avoidance)  |       |
+|   +------+------+          +------+------+       +----+----+  |
+|   | Application |          | Routing /   | ----> |   NIC   |  |
+|   | (Browser)   |          | Network Stack|      | (WLAN0) |  |
+|   +-------------+          +-------------+       +---------+  |
+|                                                               |
+|                  KERNEL SPACE (Linux)                         |
++---------------------------------------------------------------+
+```
 
 ### Workflow
 
@@ -221,7 +249,7 @@ sudo tcpdump -ni wlan0 'icmp and icmp[0] == 11'
 
 - **Strategy Registry**: Pluggable per‑flow strategies with ordering and predicates, to ease experimentation.
 - **Adaptive TTL**: Infer hop count from SYN‑ACK TTL and choose a decoy TTL that expires one hop before the server.
-- **eBPF / XDP Integration**: Move classification to eBPF/XDP for higher throughput.
+- **eBPF / XDP Integration:** Currently, PacketGhost uses `NFQUEUE` (userspace). Future plans involve offloading the packet classification (filtering) logic to **eBPF/XDP** to avoid context switches for non-target traffic, reserving userspace processing only for complex mutations.
 - **Richer Config**: Switch from key=value to JSON/YAML when needed; current parser keeps footprint minimal.
 
 ------
