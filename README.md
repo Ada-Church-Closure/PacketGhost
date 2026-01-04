@@ -1,10 +1,10 @@
 # PacketGhost: A High-Performance Network Traffic Mutation Framework
 
-**PacketGhost** is a lightweight, userspace network traffic mutation engine written in pure C. It leverages Linux Netfilter and Raw Sockets to intercept, analyze, and manipulate TCP/IP packets in real-time.
+**PacketGhost** is a lightweight, userspace network traffic mutation engine written in **pure C**. It leverages **Linux Netfilter** and **Raw Sockets** to **intercept**, **analyze**, and **manipulate** TCP/IP packets in real-time.
 
 The primary goal of this project is to research **Deep Packet Inspection (DPI) evasion strategies** by exploiting the implementation asymmetries between middleboxes (firewalls, IDS) and end-host TCP stacks. Currently, it implements advanced **TCP Fragmentation** and **Payload Splitting** strategies capable of bypassing SNI-based blocking (HTTPS) and Keyword filtering (HTTP).
 
-**Geneva Strategy Integration**: We add some of strategies (e.g., TCP window manipulation, out-of-order injection) as proposed in the [Geneva (CCS '19)](https://geneva.cs.umd.edu/) paper.
+**Geneva Strategy Integration**: This project implements a small, practical subset of strategies inspired by the [Geneva (CCS '19)](https://geneva.cs.umd.edu/) work, including out‑of‑order injection, bad‑checksum RST, and a configurable TTL decoy. The goal is faithful, minimal implementations suitable for experimentation rather than a full Geneva re‑implementation.
 
 ------
 
@@ -31,6 +31,8 @@ PacketGhost utilizes a **Hybrid User-Kernel architecture** to achieve fine-grain
    - Injects them directly into the network interface using **Raw Sockets** (`SOCK_RAW`).
    - **Drops (`NF_DROP`)** the original packet from the kernel queue.
 4. **Loop Avoidance**: Injected packets are tagged with a specific `SO_MARK` (0x100) to bypass the `iptables` interception rule, preventing infinite routing loops.
+
+5. **Configuration**: At startup PacketGhost loads a simple `key=value` configuration (optional). Each strategy can be enabled/disabled and tuned without recompiling.
 
 ------
 
@@ -96,7 +98,17 @@ This strategy utilizes the **"Geneva" Tamper primitive** to desynchronize the st
   - **DPI**: Often ignores the checksum for performance reasons, processes the RST, and stops inspecting the connection (believing it is closed).
   - **Server**: Validates the checksum, detects the error, and discards the fake RST packet, keeping the legitimate connection alive.
 
-### 5. The "Ouroboros" Loop Avoidance
+### 5. TTL Decoy (Early-Expiring Duplicate)
+
+This strategy creates a duplicate of the original packet but lowers the IP TTL so that the decoy expires on‑path before reaching the server.
+
+- Mechanism: Duplicate the current packet (e.g., HTTP request or TLS ClientHello), set `IP.ttl` to a small value (e.g., 1–2), recompute checksums, and inject via RAW socket.
+- Result:
+  - DPI sees the decoy and may change or drop tracking for the flow.
+  - Server never sees the decoy (expires en route), so end‑to‑end state remains intact.
+  - Optional: apply the same small TTL to injected RST to make it visible to DPI but not to the server.
+
+### 6. The "Ouroboros" Loop Avoidance
 
 A common challenge in raw socket injection is the "infinite loop," where injected packets are re-intercepted by Netfilter. PacketGhost solves this by marking injected packets at the socket level:
 
@@ -108,7 +120,7 @@ setsockopt(sock, SOL_SOCKET, SO_MARK, &mark, sizeof(mark));
 
 Coupled with the `iptables` rule `! --mark 0x100`, this ensures a clean egress path for modified traffic.
 
-### 6. Zero-Copy Analysis
+### 7. Zero-Copy Analysis
 
 The project minimizes memory overhead by parsing protocol headers directly from the Netfilter buffer pointers where possible. It adheres to a **Zero-Copy** philosophy for analysis, allocating new memory only during the fragmentation or injection phase.
 
@@ -147,24 +159,69 @@ PacketGhost requires `root` privileges to manipulate network interfaces.
    sudo iptables -A OUTPUT -p tcp -m multiport --dports 80,443 -m mark ! --mark 0x100 -j NFQUEUE --queue-num 0
    ```
 
-2. **Start the Engine**:
+2. Optional: Create/Edit Configuration
 
-   ```bash
-   sudo ./packet_ghost
+   A minimal example (see `sample.config` in the repo):
+
+   ```ini
+   # TTL decoy
+   ttl_decoy.enabled=1
+   ttl_decoy.ttl=2            # choose 1 for first-hop expiry, or 2–3 for slightly further
+   ttl_decoy.apply_once_per_flow=1
+
+   # Fake RST
+   rst.enabled=1
+   rst.bad_checksum=1
+   rst.with_ack=0
+   rst.small_ttl=0            # set to 1 to also apply small TTL to fake RST
+
+   # Fragmentation
+   fragment.enabled=0         # set to 1 to enable HTTP/TLS splitting
+   fragment.out_of_order=1
+   fragment.http_split_pos=2  # e.g., split GET header after first 2 bytes
+   fragment.tls_split_pos=1   # e.g., split TLS ClientHello after first byte
+
+   # User-Agent replacement
+   ua_replace.enabled=1
+   ua_replace.target=curl/
+   ua_replace.replace=Mozilla/
+
+   # TCP options
+   sack.disable=1
    ```
 
-3. **Verify**:
+3. **Start the Engine**:
+
+  ```bash
+  # without config -> defaults
+  sudo ./packet_ghost
+
+  # with config file
+  sudo ./packet_ghost ./sample.config
+  ```
+
+4. **Verify**:
 
    ```bash
    curl -v https://www.google.com
    # Logs will show: [Fragmenter] TLS Client Hello detected. Splitting...
+   sudo tcpdump -ni wlan0 'tcp and ip[8] == 2' -vvv -s 0
    ```
+- Optionally, confirm the decoy expires in flight by looking for ICMP Time Exceeded:
+
+```bash
+sudo tcpdump -ni wlan0 'icmp and icmp[0] == 11'
+```
+
+- If you cannot see the decoy, set `ttl_decoy.ttl=1` or verify there is no iptables TTL-rewrite (check `iptables -t mangle -S`).
 
 ------
 
 ## 🔮 Future Work
 
-- **eBPF / XDP Integration**: Moving the packet classification logic into the kernel using eBPF to reduce context switching overhead and achieve 10Gbps+ performance.
-- **Configuration Parsing**: Supporting dynamic rule loading via JSON/YAML.
+- **Strategy Registry**: Pluggable per‑flow strategies with ordering and predicates, to ease experimentation.
+- **Adaptive TTL**: Infer hop count from SYN‑ACK TTL and choose a decoy TTL that expires one hop before the server.
+- **eBPF / XDP Integration**: Move classification to eBPF/XDP for higher throughput.
+- **Richer Config**: Switch from key=value to JSON/YAML when needed; current parser keeps footprint minimal.
 
 ------
