@@ -1,6 +1,7 @@
 #include "strategies.h"
 #include "../network/injector.h"
 #include "../utils/csum.h"
+#include "../config/config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -20,12 +21,15 @@ void inject_fake_rst(packet_ctx_t *ctx, int bad_checksum) {
   parse_packet(&rst_pkt, rst_buf, total_len);
 
   rst_pkt.tcp->rst = 1;
-  rst_pkt.tcp->ack = 0;
+  rst_pkt.tcp->ack = g_config.rst.with_ack ? 1 : 0;
   rst_pkt.tcp->syn = 0;
   rst_pkt.tcp->fin = 0;
   rst_pkt.tcp->psh = 0;
 
   rst_pkt.ip->tot_len = htons(total_len);
+  if (g_config.rst.small_ttl) {
+    rst_pkt.ip->ttl = (uint8_t)g_config.ttl_decoy.ttl;
+  }
 
   if (bad_checksum) {
     rst_pkt.tcp->check = 0xDEAD;

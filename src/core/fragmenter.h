@@ -3,6 +3,7 @@
 
 #include "../common.h"
 
+// default is enabled, can be overridden by config at runtime
 #define OUT_OF_ORDER_INJECTION 1
 
 /**

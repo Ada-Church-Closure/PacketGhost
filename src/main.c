@@ -12,6 +12,7 @@
 #include "network/injector.h"
 #include "protocol/packet.h"
 #include "state/session.h"
+#include "config/config.h"
 
 static void process_outgoing(packet_ctx_t *ctx) {
   // Ban SACK, this is simple.
@@ -147,7 +148,15 @@ static int cb(struct nfq_q_handle *qh, struct nfgenmsg *nfmsg,
   return ret;
 }
 
-int main() {
+int main(int argc, char** argv) {
+
+  const char *cfg_path = NULL;
+  if (argc >= 2) cfg_path = argv[1];
+  if (config_load(cfg_path) < 0) {
+    printf("[Config] No config file, using defaults.\n");
+  } else {
+    printf("[Config] Loaded configuration%s%s.\n", cfg_path?": ":"", cfg_path?cfg_path:"");
+  }
 
   if (injector_init() < 0) {
     return -1;

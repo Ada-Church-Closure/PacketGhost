@@ -14,6 +14,7 @@ find_library(NFNL_LIB nfnetlink REQUIRED)
 
 # 包含头文件路径
 include_directories(src)
+include_directories(src/config)
 
 # 自动收集所有源文件
 file(GLOB_RECURSE SOURCES "src/*.c")

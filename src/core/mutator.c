@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "../config/config.h"
 /**
  * @brief We have to handle some variable length like 'curl' to 'Mozilla'.
  *        Some times it will cause some memory problems
@@ -58,8 +59,10 @@ static int perform_replacement(packet_ctx_t *ctx, uint8_t *found_ptr, const char
 int mutator_try_modify_http(packet_ctx_t *ctx) {
     if (!ctx->pkt.valid || ctx->pkt.payload_len == 0) return 0;
 
-    const char *target = "curl/";
-    const char *replace = "Mozilla/";
+    if (!g_config.ua_replace.enabled) return 0;
+
+    const char *target = g_config.ua_replace.target;
+    const char *replace = g_config.ua_replace.replace;
     
     if (ctx->pkt.payload_len < strlen(target)) return 0;
 

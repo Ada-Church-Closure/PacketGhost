@@ -5,6 +5,7 @@
 #include "fragmenter.h"
 #include "../network/injector.h"
 #include "../utils/protocol_types.h"
+#include "../config/config.h"
 
 /**
  * @brief Construct and send a slice
@@ -49,17 +50,20 @@ int try_fragment_traffic(packet_ctx_t *ctx) {
 
   int should_fragment = 0;
   int split_pos = 0;
+  if (!g_config.fragment.enabled) {
+    return 0; // fragmentation disabled by config
+  }
 
   if (is_http_request(ctx->pkt.payload, ctx->pkt.payload_len)) {
     // [Header] [P1 P2] [P3 P4 ... Pn]
     // Chunk 1: [Header] [P1 P2]
     // Chunk 2: [Header] [P3 ... Pn]
     should_fragment = 1;
-    split_pos = 2;
+    split_pos = g_config.fragment.http_split_pos;
     printf("[Fragmenter] HTTP detected.\n");
   } else if (is_tls_hello(ctx->pkt.payload, ctx->pkt.payload_len)) {
     should_fragment = 1;
-    split_pos = 1;
+    split_pos = g_config.fragment.tls_split_pos;
     printf("[Fragmenter] TLS Client Hello detected.\n");
   }
 
@@ -69,7 +73,7 @@ int try_fragment_traffic(packet_ctx_t *ctx) {
     printf("[Fragmenter] Splitting %d bytes into %d + %d\n",
            ctx->pkt.payload_len, split_pos, ctx->pkt.payload_len - split_pos);
 
-    if (OUT_OF_ORDER_INJECTION) {
+    if ((OUT_OF_ORDER_INJECTION) && g_config.fragment.out_of_order) {
       // send the second slice first
       send_slice(ctx, original_seq + split_pos, payload_start + split_pos,
                  ctx->pkt.payload_len - split_pos);
