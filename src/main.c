@@ -8,7 +8,6 @@
 
 #include "common.h"
 #include "core/apply_strategies.h"
-#include "core/fragmenter.h"
 #include "core/mutator.h"
 #include "network/injector.h"
 #include "protocol/packet.h"
@@ -33,8 +32,16 @@ static void process_outgoing(packet_ctx_t *ctx) {
   //   return;
   // }
 
+  // Inject a TTL decoy once near the beginning of a flow to confuse DPI.
+  // Keep it conservative to avoid bandwidth overhead.
+  if (ctx->sess && !ctx->sess->ttl_decoy_sent) {
+    if (apply_ttl_decoy_strategy(ctx) == 1) {
+      ctx->sess->ttl_decoy_sent = 1;
+    }
+  }
+
   // Here, we make a fake RST, default action is NF_ACCEPT.
-  if (apply_fake_RST_strategy(ctx) == 0) {
+  if (apply_fake_RST_strategy(ctx) == 1) {
     return;
   }
 

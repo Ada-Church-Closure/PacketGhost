@@ -40,6 +40,8 @@ typedef struct {
   uint32_t client_ip;
   // avoid retranmission bugs
   uint8_t ua_modified;
+  // avoid injecting TTL decoys multiple times per flow
+  uint8_t ttl_decoy_sent;
 
   UT_hash_handle hh; // uthash
 } session_t;

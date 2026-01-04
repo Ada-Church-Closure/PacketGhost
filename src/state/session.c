@@ -48,6 +48,7 @@ session_t* session_create(uint32_t saddr, uint32_t daddr, uint16_t sport, uint16
     s->seq_delta = 0;
     s->client_ip = saddr;
     s->ua_modified = 0;
+    s->ttl_decoy_sent = 0;
     
 
     s->state = TCP_STATE_SYN_SENT;
